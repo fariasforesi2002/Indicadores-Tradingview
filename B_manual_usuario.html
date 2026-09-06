@@ -1,0 +1,2134 @@
+<title>Manual Adv. MAs MTF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+:root{
+  --ground:#F6F7F9;
+  --surface:#FFFFFF;
+  --surface-2:#EDF0F4;
+  --ink:#151A21;
+  --muted:#5C6673;
+  --rule:#DDE2E8;
+  --accent:#E8A317;
+  --accent-ink:#8A5D00;
+  --accent-wash:#FDF4E0;
+  --bull:#12896E;
+  --bull-wash:#E4F3EE;
+  --bear:#C4453F;
+  --bear-wash:#FAEAE9;
+  --shadow:0 1px 2px rgba(21,26,33,.06),0 8px 24px rgba(21,26,33,.05);
+  --topbar-bg:rgba(246,247,249,.88);
+
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --measure:68ch;
+  --rail:16rem;
+  --bar:2.9rem;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1218;
+    --surface:#161B23;
+    --surface-2:#1D242E;
+    --ink:#E8ECF1;
+    --muted:#8B96A5;
+    --rule:#262E38;
+    --accent:#FFB300;
+    --accent-ink:#FFC947;
+    --accent-wash:#2A2113;
+    --bull:#2FBF9B;
+    --bull-wash:#12241F;
+    --bear:#E8635C;
+    --bear-wash:#2A1917;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+    --topbar-bg:rgba(14,18,24,.88);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1218;
+  --surface:#161B23;
+  --surface-2:#1D242E;
+  --ink:#E8ECF1;
+  --muted:#8B96A5;
+  --rule:#262E38;
+  --accent:#FFB300;
+  --accent-ink:#FFC947;
+  --accent-wash:#2A2113;
+  --bull:#2FBF9B;
+  --bull-wash:#12241F;
+  --bear:#E8635C;
+  --bear-wash:#2A1917;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  --topbar-bg:rgba(14,18,24,.88);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#151A21}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* ---------- shell ---------- */
+.wrap{max-width:82rem;margin:0 auto;padding:0 1.5rem}
+.layout{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:3.5rem;align-items:start}
+@media (max-width:60rem){.layout{grid-template-columns:minmax(0,1fr);gap:0}}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:var(--topbar-bg);
+  -webkit-backdrop-filter:saturate(180%) blur(10px);
+  backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.tb-in{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  min-height:var(--bar);padding-top:.4rem;padding-bottom:.4rem;
+}
+.tb-name{
+  font-family:var(--display);font-weight:700;font-size:.86rem;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tb-name .lff{color:var(--muted);font-weight:500}
+.tb-ctrls{display:flex;gap:.5rem;flex:none}
+.seg{
+  display:flex;background:var(--surface-2);border:1px solid var(--rule);
+  border-radius:4px;padding:2px;gap:2px;
+}
+.seg button{
+  font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.04em;
+  border:0;background:transparent;color:var(--muted);cursor:pointer;
+  padding:.24rem .5rem;border-radius:3px;line-height:1.3;min-width:2rem;
+}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg[data-seg="theme"] button{font-size:.82rem;min-width:1.9rem;padding:.16rem .4rem}
+@media (max-width:34rem){
+  .tb-name{font-size:.78rem}
+  .tb-name .lff{display:none}
+  .seg button{padding:.24rem .4rem;min-width:1.8rem}
+}
+
+/* ---------- masthead ---------- */
+.masthead{border-bottom:1px solid var(--rule);background:var(--surface)}
+.masthead .wrap{padding-top:2.75rem;padding-bottom:2.25rem}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;margin-bottom:1.1rem;
+}
+.eyebrow .free{color:var(--accent-ink);border:1px solid var(--accent);border-radius:2px;padding:.1rem .45rem}
+h1{
+  font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.2vw,3.15rem);
+  line-height:1.06;letter-spacing:-.022em;margin:0 0 .7rem;text-wrap:balance;
+}
+h1 .sub{display:block;font-weight:500;font-size:clamp(1rem,2.4vw,1.35rem);color:var(--muted);letter-spacing:-.01em;margin-top:.5rem}
+.standfirst{font-size:1.1rem;color:var(--muted);max-width:60ch;margin:0}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:calc(var(--bar) + 1rem);padding:2.5rem 0;font-family:var(--display);font-size:.86rem}
+@media (max-width:60rem){.rail{position:static;padding:1.5rem 0 0}}
+.rail-title{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 .85rem;font-weight:500;
+}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.1rem}
+.rail a{
+  display:flex;gap:.7rem;text-decoration:none;color:var(--muted);
+  padding:.34rem .5rem;border-radius:3px;line-height:1.35;
+  border-left:2px solid transparent;
+}
+.rail a:hover{color:var(--ink);background:var(--surface-2);border-left-color:var(--accent)}
+.rail a .n{font-family:var(--mono);font-size:.74rem;color:var(--accent-ink);flex:none;padding-top:.08rem}
+.toc-mobile{display:none}
+@media (max-width:60rem){
+  .toc-mobile{display:block;background:var(--surface);border:1px solid var(--rule);border-radius:5px;margin:1.5rem 0 0}
+  .toc-mobile summary{cursor:pointer;padding:.85rem 1rem;font-family:var(--display);font-weight:600;font-size:.95rem}
+  .toc-mobile .rail{padding:0 .6rem .8rem}
+  .rail-desktop{display:none}
+}
+
+/* ---------- article ---------- */
+article{padding:2.5rem 0 5rem;min-width:0}
+section{scroll-margin-top:calc(var(--bar) + 1rem);padding-bottom:3.25rem}
+section+section{border-top:1px solid var(--rule);padding-top:3rem}
+h2{
+  font-family:var(--display);font-weight:700;font-size:clamp(1.45rem,3.2vw,2rem);
+  line-height:1.15;letter-spacing:-.018em;margin:0 0 1.1rem;text-wrap:balance;
+  display:flex;align-items:baseline;gap:.75rem;
+}
+h2 .n{
+  font-family:var(--mono);font-size:.8rem;font-weight:500;color:var(--accent-ink);
+  flex:none;letter-spacing:.06em;padding-top:.15rem;
+}
+h3{
+  font-family:var(--display);font-weight:600;font-size:1.14rem;letter-spacing:-.01em;
+  margin:2.1rem 0 .6rem;text-wrap:balance;
+}
+h4{font-family:var(--display);font-weight:600;font-size:.98rem;margin:1.5rem 0 .4rem}
+p{margin:0 0 1rem;max-width:var(--measure)}
+ul,ol{max-width:var(--measure);margin:0 0 1rem;padding-left:1.35rem}
+li{margin-bottom:.42rem}
+li::marker{color:var(--accent-ink)}
+strong{font-weight:600}
+a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:3px}
+code,.k{
+  font-family:var(--mono);font-size:.86em;background:var(--surface-2);
+  padding:.1em .38em;border-radius:3px;color:var(--ink);
+}
+.lead{font-size:1.08rem;color:var(--muted);max-width:var(--measure)}
+
+/* ---------- chips ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:-.4rem 0 1.2rem}
+.chip{
+  font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase;padding:.22rem .55rem;border-radius:2px;
+  border:1px solid var(--rule);color:var(--muted);background:var(--surface);
+}
+.chip.on{border-color:var(--bull);color:var(--bull);background:var(--bull-wash)}
+.chip.off{border-color:var(--rule);color:var(--muted)}
+.chip.grp{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-wash)}
+
+/* ---------- callouts ---------- */
+.note{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);
+  border-radius:0 5px 5px 0;padding:1rem 1.15rem;margin:1.4rem 0;max-width:var(--measure);
+}
+.note p:last-child{margin-bottom:0}
+.note .lbl{
+  display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--accent-ink);margin-bottom:.4rem;font-weight:600;
+}
+.note.warn{border-left-color:var(--bear)}
+.note.warn .lbl{color:var(--bear)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:1.3rem 0;border:1px solid var(--rule);border-radius:5px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:var(--display);font-size:.87rem;min-width:34rem}
+th,td{text-align:left;padding:.62rem .85rem;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;background:var(--surface-2);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:none}
+td.num,th.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td .ma{font-family:var(--mono);font-weight:500}
+.sw{display:inline-block;width:.62rem;height:.62rem;border-radius:2px;margin-right:.45rem;vertical-align:baseline}
+
+/* ---------- figures ---------- */
+figure{margin:1.8rem 0;max-width:var(--measure)}
+figure svg{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:5px;background:var(--surface)}
+figcaption{font-size:.87rem;color:var(--muted);margin-top:.6rem;font-family:var(--display)}
+
+/* ---------- recipe cards ---------- */
+.recipes{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));margin:1.4rem 0;max-width:none}
+.recipe{
+  background:var(--surface);border:1px solid var(--rule);border-radius:6px;
+  padding:1.15rem 1.25rem;box-shadow:var(--shadow);
+}
+.recipe h4{margin-top:0;font-size:1.02rem}
+.recipe .who{font-size:.87rem;color:var(--muted);margin-bottom:.85rem;font-family:var(--display)}
+.recipe dl{margin:0;font-size:.85rem;font-family:var(--display);display:grid;grid-template-columns:auto 1fr;gap:.3rem .7rem}
+.recipe dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:.15rem}
+.recipe dd{margin:0}
+
+/* ---------- faq ---------- */
+.faq{border-top:1px solid var(--rule);max-width:var(--measure)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{
+  cursor:pointer;padding:.9rem 0;font-family:var(--display);font-weight:600;font-size:.98rem;
+  list-style:none;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--mono);color:var(--accent-ink);flex:none}
+.faq details[open] summary::after{content:"\2212"}
+.faq details>*:not(summary){margin-bottom:1rem}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule);background:var(--surface)}
+footer .wrap{padding:2.25rem 1.5rem 3rem}
+footer p{font-size:.87rem;color:var(--muted);font-family:var(--display);max-width:var(--measure)}
+footer .sig{font-family:var(--display);font-weight:600;color:var(--ink);font-size:.95rem;margin-bottom:.5rem}
+</style>
+
+<div class="topbar">
+  <div class="wrap tb-in">
+    <span class="tb-name">Adv. MAs MTF <span class="lff">(Eng/Spa/Port)(LFF)</span></span>
+    <div class="tb-ctrls">
+      <div class="seg" data-seg="lang" role="group" aria-label="Language / Idioma">
+        <button type="button" data-lang="es" class="on" aria-pressed="true">ES</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="pt" aria-pressed="false">PT</button>
+      </div>
+      <div class="seg" data-seg="theme" role="group" aria-label="Theme / Tema">
+        <button type="button" data-theme-set="auto" class="on" aria-pressed="true" title="Automático">◐</button>
+        <button type="button" data-theme-set="light" aria-pressed="false" title="Claro">☀</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" title="Oscuro">☾</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+
+    <div data-lang-block="es">
+      <div class="eyebrow">
+        <span class="free">Gratuito · código abierto</span>
+        <span>TradingView</span>
+        <span>Pine Script v6</span>
+        <span>v2</span>
+      </div>
+      <h1>Manual de uso
+        <span class="sub">Adv. MAs MTF (Eng/Spa/Port)(LFF) — cinco medias móviles multi&#8209;temporalidad</span>
+      </h1>
+      <p class="standfirst">Cómo instalarlo, qué hace cada módulo y —sobre todo— qué te está diciendo cada número que ves en pantalla.</p>
+    </div>
+
+    <div data-lang-block="en" hidden>
+      <div class="eyebrow">
+        <span class="free">Free · open source</span>
+        <span>TradingView</span>
+        <span>Pine Script v6</span>
+        <span>v2</span>
+      </div>
+      <h1>User manual
+        <span class="sub">Adv. MAs MTF (Eng/Spa/Port)(LFF) — five multi&#8209;timeframe moving averages</span>
+      </h1>
+      <p class="standfirst">How to install it, what each module does and — above all — what every number on your screen is telling you.</p>
+    </div>
+
+    <div data-lang-block="pt" hidden>
+      <div class="eyebrow">
+        <span class="free">Gratuito · código aberto</span>
+        <span>TradingView</span>
+        <span>Pine Script v6</span>
+        <span>v2</span>
+      </div>
+      <h1>Manual de uso
+        <span class="sub">Adv. MAs MTF (Eng/Spa/Port)(LFF) — cinco médias móveis multi&#8209;tempo gráfico</span>
+      </h1>
+      <p class="standfirst">Como instalar, o que cada módulo faz e — acima de tudo — o que cada número na sua tela está dizendo.</p>
+    </div>
+
+  </div>
+</header>
+
+<div class="wrap" data-lang-block="es">
+  <details class="toc-mobile">
+    <summary>Contenido del manual</summary>
+    <nav class="rail" aria-label="Contenido">
+        <ol>
+          <li><a href="#es-que-es"><span class="n">01</span> Qué es y para quién</a></li>
+          <li><a href="#es-instalacion"><span class="n">02</span> Instalación y primer arranque</a></li>
+          <li><a href="#es-medias"><span class="n">03</span> Las cinco medias</a></li>
+          <li><a href="#es-tabla"><span class="n">04</span> La tabla resumen</a></li>
+          <li><a href="#es-cruces"><span class="n">05</span> Golden Cross y Death Cross</a></li>
+          <li><a href="#es-relleno"><span class="n">06</span> El relleno entre medias</a></li>
+          <li><a href="#es-cono"><span class="n">07</span> El cono de proyección</a></li>
+          <li><a href="#es-probabilidad"><span class="n">08</span> La probabilidad de cruce</a></li>
+          <li><a href="#es-banda"><span class="n">09</span> La banda anti-ruido</a></li>
+          <li><a href="#es-hilo"><span class="n">10</span> Cómo se conecta todo</a></li>
+          <li><a href="#es-alarmas"><span class="n">11</span> Las 24 alarmas</a></li>
+          <li><a href="#es-recetas"><span class="n">12</span> Recetas de configuración</a></li>
+          <li><a href="#es-limites"><span class="n">13</span> Limitaciones</a></li>
+          <li><a href="#es-faq"><span class="n">14</span> Preguntas frecuentes</a></li>
+        </ol>
+    </nav>
+  </details>
+
+  <div class="layout">
+    <nav class="rail rail-desktop" aria-label="Contenido">
+      <p class="rail-title">Contenido</p>
+        <ol>
+          <li><a href="#es-que-es"><span class="n">01</span> Qué es y para quién</a></li>
+          <li><a href="#es-instalacion"><span class="n">02</span> Instalación y primer arranque</a></li>
+          <li><a href="#es-medias"><span class="n">03</span> Las cinco medias</a></li>
+          <li><a href="#es-tabla"><span class="n">04</span> La tabla resumen</a></li>
+          <li><a href="#es-cruces"><span class="n">05</span> Golden Cross y Death Cross</a></li>
+          <li><a href="#es-relleno"><span class="n">06</span> El relleno entre medias</a></li>
+          <li><a href="#es-cono"><span class="n">07</span> El cono de proyección</a></li>
+          <li><a href="#es-probabilidad"><span class="n">08</span> La probabilidad de cruce</a></li>
+          <li><a href="#es-banda"><span class="n">09</span> La banda anti-ruido</a></li>
+          <li><a href="#es-hilo"><span class="n">10</span> Cómo se conecta todo</a></li>
+          <li><a href="#es-alarmas"><span class="n">11</span> Las 24 alarmas</a></li>
+          <li><a href="#es-recetas"><span class="n">12</span> Recetas de configuración</a></li>
+          <li><a href="#es-limites"><span class="n">13</span> Limitaciones</a></li>
+          <li><a href="#es-faq"><span class="n">14</span> Preguntas frecuentes</a></li>
+        </ol>
+    </nav>
+
+    <article>
+      <section id="es-que-es">
+        <h2><span class="n">01</span> Qué es y para quién</h2>
+        <p class="lead">Cinco medias móviles independientes sobre el gráfico de precio, cada una configurable hasta el último detalle, más un conjunto de lecturas que te dicen qué están haciendo esas medias entre sí.</p>
+        <p>Casi todos los indicadores de medias móviles del mercado hacen una cosa: dibujan las líneas. Este también las dibuja, pero además responde las preguntas que uno se hace mirándolas. ¿Esta media está en tendencia o va de costado? ¿Están todas de acuerdo? ¿Cuánto falta para que se crucen? ¿Ese cruce que veo es real o es ruido de un mercado lateral?</p>
+        <p>Sirve para quien opera o invierte siguiendo tendencia y usa medias como esqueleto de su análisis: swing traders, inversores de mediano plazo, y también quien solo quiere el cruce de 50 y 200 bien marcado y nada más. No es una estrategia y no da órdenes de compra o venta: es una herramienta de lectura.</p>
+        <h3>Lo que trae de fábrica</h3>
+        <ul>
+          <li><strong>9 tipos de media</strong> por cada una de las cinco: SMA, EMA, WMA, RMA, HMA, VWMA, TEMA, KAMA y JMA.</li>
+          <li><strong>Multi-temporalidad</strong>: cada media puede calcularse en una temporalidad distinta de la del gráfico. Podés ver la SMA 200 diaria mientras operás en 1 hora.</li>
+          <li><strong>Trilingüe</strong> español, inglés y portugués.</li>
+          <li><strong>24 alarmas</strong> configurables.</li>
+          <li><strong>Código abierto</strong> bajo licencia MPL 2.0 y gratuito, sin versión paga ni funciones bloqueadas.</li>
+        </ul>
+      </section>
+
+      <section id="es-instalacion">
+        <h2><span class="n">02</span> Instalación y primer arranque</h2>
+        <p>Buscalo en el buscador de indicadores de TradingView por su nombre, <span class="k">Adv. MAs MTF (Eng/Spa/Port)(LFF)</span>, y agregalo al gráfico. No hace falta nada más.</p>
+
+        <h3>Qué vas a ver apenas lo agregues</h3>
+        <p>Cinco medias, una tabla resumen arriba a la derecha y, si el activo tuvo alguno, las etiquetas de los cruces dorados y de la muerte sobre las velas.</p>
+
+        <div class="tw">
+          <table>
+            <thead>
+              <tr><th>Media</th><th>Tipo</th><th class="num">Longitud</th><th>Color</th><th class="num">Grosor</th><th>Para qué está</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="ma">MA 1</td><td>EMA</td><td class="num">8</td><td><span class="sw" style="background:#2962FF"></span>azul</td><td class="num">1</td><td>Pulso de muy corto plazo</td></tr>
+              <tr><td class="ma">MA 2</td><td>EMA</td><td class="num">21</td><td><span class="sw" style="background:#E53935"></span>rojo</td><td class="num">1</td><td>Corto plazo</td></tr>
+              <tr><td class="ma">MA 3</td><td>EMA</td><td class="num">50</td><td><span class="sw" style="background:#E5C100"></span>amarillo</td><td class="num">1</td><td>Referencia de swing</td></tr>
+              <tr><td class="ma">MA 4</td><td>SMA</td><td class="num">100</td><td><span class="sw" style="background:#43A047"></span>verde</td><td class="num">1</td><td>Tendencia intermedia</td></tr>
+              <tr><td class="ma">MA 5</td><td>SMA</td><td class="num">200</td><td><span class="sw" style="background:#8E44AD"></span>violeta</td><td class="num">2</td><td>Tendencia de fondo</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Lo primero que sorprende</span>
+          <p>Las cinco medias vienen en <strong>temporalidad diaria</strong>, no en la del gráfico. Si abrís un gráfico de 1 hora, vas a ver las medias diarias dibujadas sobre él —que es justamente la gracia del indicador: contexto superior sin cambiar de gráfico. Si querés que sigan la temporalidad del gráfico, borrá el campo <span class="k">Temporalidad</span> de cada media y dejalo vacío.</p>
+        </div>
+
+        <p>La 200 va en grosor 2 a propósito: es la línea de referencia estructural del mercado y conviene que se distinga de un vistazo entre las otras cuatro.</p>
+
+        <h3>Todo lo pesado viene apagado</h3>
+        <p>El cono de proyección, la tabla de probabilidad, el relleno y la banda anti-ruido vienen <strong>desactivados</strong>. Es deliberado: al agregarlo ves un gráfico limpio, y vas prendiendo lo que te sirve. Este manual está ordenado más o menos en ese orden, de lo básico a lo opcional.</p>
+      </section>
+
+      <section id="es-medias">
+        <h2><span class="n">03</span> Las cinco medias</h2>
+        <p>Cada media tiene catorce controles propios agrupados en <span class="k">📈 MA 1</span> … <span class="k">📈 MA 5</span>. Los importantes son cuatro: tipo, longitud, temporalidad y fuente.</p>
+
+        <h3>Qué tipo de media conviene</h3>
+        <p>La diferencia entre los nueve tipos es una sola cosa: <strong>cuánto pesa el pasado reciente frente al lejano</strong>. Cuanto más pesa lo reciente, antes reacciona la media, y más a menudo se equivoca.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Tipo</th><th>Qué la hace distinta</th><th>Cuándo usarla</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">SMA</td><td>Promedio simple: todas las barras pesan igual.</td><td>La más lenta y estable. Es la referencia institucional: cuando el mercado habla de "la 200", habla de una SMA.</td></tr>
+              <tr><td class="ma">EMA</td><td>Pondera más las barras recientes, con decaimiento exponencial.</td><td>La más usada para seguir tendencia. Reacciona antes que la SMA sin volverse errática.</td></tr>
+              <tr><td class="ma">WMA</td><td>Ponderación lineal decreciente.</td><td>A mitad de camino entre SMA y EMA. Buena si la EMA te resulta demasiado nerviosa.</td></tr>
+              <tr><td class="ma">RMA</td><td>La media de Wilder, la que usan por dentro el RSI y el ATR. Muy suave.</td><td>Cuando querés filtrar ruido agresivamente. Equivale aproximadamente a una EMA de período doble.</td></tr>
+              <tr><td class="ma">HMA</td><td>Hull: diseñada para tener poco retraso sin perder suavidad.</td><td>Para detectar giros temprano. Muy reactiva, y por eso engaña en mercados laterales.</td></tr>
+              <tr><td class="ma">VWMA</td><td>Pondera cada barra por su volumen.</td><td>Donde el volumen es real y significativo: acciones, futuros, índices. En forex y cripto spot el volumen es parcial, así que aporta menos.</td></tr>
+              <tr><td class="ma">TEMA</td><td>Triple EMA: casi elimina el retraso.</td><td>Operativa rápida. El costo es el sobregiro: se pasa de largo en los giros bruscos.</td></tr>
+              <tr><td class="ma">KAMA</td><td>Adaptativa de Kaufman: se acelera sola cuando hay tendencia y se frena cuando hay ruido.</td><td>Instrumentos que alternan entre fases de tendencia y fases laterales. Se autorregula.</td></tr>
+              <tr><td class="ma">JMA</td><td>Jurik: suave y con poco retraso a la vez. Tiene dos parámetros globales, Fase y Potencia.</td><td>Cuando querés lo mejor de los dos mundos y no te molesta ajustar dos perillas extra.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Parámetros de la JMA</span>
+          <p>Están en el grupo <span class="k">🧮 Parámetros globales JMA</span> y afectan a todas las medias que uses en modo JMA. Vienen en Fase 50 y Potencia 2, que es la configuración estándar más reproducida de Mark Jurik. Fase 0 da más retraso; Fase por encima de 0, menos retraso a cambio de algo de sobregiro. Potencia más alta suaviza más y retrasa más.</p>
+        </div>
+
+        <h3>La multi-temporalidad</h3>
+        <p>El campo <span class="k">Temporalidad</span> de cada media acepta cualquier temporalidad de TradingView. Vacío significa "la del gráfico". Es la función más potente del indicador y también la que más se malinterpreta, así que vale una aclaración: una media diaria vista en un gráfico de 1 hora <strong>no se recalcula cada hora</strong>. Se queda quieta durante todo el día y da un escalón cuando cierra la vela diaria. Eso está bien, es lo que tiene que pasar; pero explica por qué se ve como una escalera si hacés mucho zoom.</p>
+
+        <h3>Fuente, color, grosor y estilo</h3>
+        <p>La <span class="k">Fuente</span> es sobre qué precio se calcula: cierre, apertura, máximo, mínimo, o los promedios <span class="k">hl2</span>, <span class="k">hlc3</span> y <span class="k">ohlc4</span>. Cambiarla a un promedio suaviza la media antes de calcularla y reduce el efecto de las mechas largas. Color, grosor y estilo (continua, rayada, punteada) son puramente visuales.</p>
+
+        <h3>Las etiquetas sobre el gráfico</h3>
+        <p>Cada media puede mostrar una etiqueta a la derecha con su identificación técnica —<span class="k">EMA(50) 1D</span>— y podés elegir qué partes mostrar (tipo, longitud, temporalidad), a qué distancia y de qué tamaño. El formato es universal, igual en los tres idiomas.</p>
+      </section>
+
+      <section id="es-tabla">
+        <h2><span class="n">04</span> La tabla resumen</h2>
+        <div class="chips"><span class="chip grp">📋 Tabla resumen</span><span class="chip on">encendida</span></div>
+        <p>Una fila por media y, opcionalmente, una fila final de alineación. Podés moverla a cualquiera de las nueve esquinas, cambiarle el tamaño y los colores, y decidir si incluye las medias que tenés ocultas.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Columna</th><th>Qué muestra</th><th>Cómo se lee</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Color</td><td>El color de la línea en el gráfico.</td><td>Para no tener que memorizar cuál es cuál.</td></tr>
+              <tr><td class="ma">Tipo</td><td>SMA, EMA, HMA…</td><td>—</td></tr>
+              <tr><td class="ma">Longitud</td><td>El período.</td><td>—</td></tr>
+              <tr><td class="ma">Temporalidad</td><td>En qué temporalidad se calcula.</td><td>Si dice <span class="k">1D</span> y estás en un gráfico de 1h, esa media es contexto superior.</td></tr>
+              <tr><td class="ma">Dist. %</td><td>Distancia del precio a la media, en porcentaje.</td><td>Positivo = el precio está por encima. Es la medida de qué tan extendido está el precio: un +12% sobre la media de 200 suele ser mucho.</td></tr>
+              <tr><td class="ma">Dist. $</td><td>La misma distancia en unidades del activo.</td><td>Útil para dimensionar un stop.</td></tr>
+              <tr><td class="ma">Ritmo</td><td>A qué velocidad sube o baja la media, en % de su propio valor por barra.</td><td>Ver abajo.</td></tr>
+              <tr><td class="ma">Últ. cruce</td><td>Cuántas barras pasaron desde que el precio cruzó esa media.</td><td>Número bajo = señal fresca. Número muy alto = movimiento maduro.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>La columna Ritmo</h3>
+        <p>Muestra algo como <span class="k">↗ +0.085%</span>. Se calcula tomando cuánto se movió la media en las últimas <span class="k">N</span> barras —20 por defecto, ajustable en <span class="k">📐 Ventana del ritmo</span>—, dividiendo por N y expresándolo como porcentaje del valor actual de la media.</p>
+        <p><strong>Qué te dice.</strong> Distingue una media que está realmente en tendencia de una que va de costado. Y esa distinción importa más de lo que parece: una media puede estar por debajo del precio —lectura alcista— y al mismo tiempo estar aplanándose. Eso no es una tendencia alcista sana, es una tendencia perdiendo fuerza. La flecha te lo dice antes de que el precio lo muestre.</p>
+        <p>La flecha es ↗ si sube, ↘ si baja y → si está plana. El umbral de "plana" lo ponés vos en <span class="k">Umbral de plana</span>, 0,02% por barra por defecto. Como el número está normalizado en porcentaje, es comparable entre un activo de 5 dólares y uno de 5.000, y entre temporalidades distintas.</p>
+        <p><strong>Lectura típica:</strong> todas las flechas apuntando al mismo lado es una tendencia sana. Las rápidas girando mientras las lentas siguen igual es un cambio en formación, todavía sin confirmar.</p>
+
+        <h3>La fila de alineación: el abanico</h3>
+        <p>La última fila dice algo como <span class="k">Abanico: ABANICO ALCISTA · precio sobre 5/5</span>. Ordena las medias de la más rápida a la más lenta y verifica si sus valores quedaron apilados en ese mismo orden.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 210" role="img" aria-label="Tres diagramas comparando abanico alcista, bajista y mixto">
+            <g font-family="IBM Plex Mono, monospace" font-size="11">
+              <!-- alcista -->
+              <g transform="translate(10,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bull-wash)" stroke="var(--rule)"/>
+                <path d="M14 118 C60 108, 120 78, 178 34" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 126 C60 118, 120 92, 178 52" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 132 C60 126, 120 104, 178 70" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 137 C60 133, 120 116, 178 88" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 141 C60 139, 120 127, 178 106" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bull)" font-weight="600">ABANICO ALCISTA</text>
+              </g>
+              <text x="106" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">rápida arriba,</text>
+              <text x="106" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">lenta abajo</text>
+
+              <!-- bajista -->
+              <g transform="translate(224,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bear-wash)" stroke="var(--rule)"/>
+                <path d="M14 34 C60 78, 120 108, 178 118" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 52 C60 92, 120 118, 178 126" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 70 C60 104, 120 126, 178 132" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 88 C60 116, 120 133, 178 137" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 106 C60 127, 120 139, 178 141" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bear)" font-weight="600">ABANICO BAJISTA</text>
+              </g>
+              <text x="320" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">rápida abajo,</text>
+              <text x="320" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">lenta arriba</text>
+
+              <!-- mixto -->
+              <g transform="translate(438,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+                <path d="M14 80 C60 50, 120 118, 178 62" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 62 C60 106, 120 60, 178 104" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 104 C60 74, 120 100, 178 78" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 92 C60 96, 120 82, 178 92" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 74 C60 88, 120 90, 178 86" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--muted)" font-weight="600">MIXTO</text>
+              </g>
+              <text x="534" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">enredadas:</text>
+              <text x="534" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">sin acuerdo</text>
+            </g>
+          </svg>
+          <figcaption>Los tres estados posibles del abanico. El grosor mayor es la media de 200.</figcaption>
+        </figure>
+
+        <p><strong>Qué te dice.</strong> Un abanico limpio es la firma clásica de una tendencia fuerte: todos los plazos están de acuerdo al mismo tiempo. Cuando se enreda y pasa a MIXTO, lo habitual es que sea el final o la pausa del movimiento, no su continuación.</p>
+        <p>El <span class="k">precio sobre X/5</span> agrega dónde está parado el precio respecto del conjunto. Un 5/5 con abanico alcista es la lectura más limpia posible. Un 2/5 con abanico alcista te avisa que el precio ya está corrigiendo hacia adentro de las medias, aunque las medias todavía no se hayan desordenado.</p>
+
+        <div class="note">
+          <span class="lbl">Un detalle de método que importa</span>
+          <p>La velocidad de cada media <strong>no se mide por su longitud</strong>, sino por el tiempo que cubre: longitud multiplicada por la duración de su temporalidad. Ordenar solo por longitud sería un error apenas mezclás temporalidades, porque una EMA de 8 semanal cubre casi dos meses y es mucho más lenta que una SMA de 200 en 5 minutos, que cubre menos de un día. Con todas las medias en la misma temporalidad —el caso por defecto— el resultado es idéntico.</p>
+        </div>
+      </section>
+
+      <section id="es-cruces">
+        <h2><span class="n">05</span> Golden Cross y Death Cross</h2>
+        <div class="chips"><span class="chip grp">✨ Golden / Death Cross</span><span class="chip on">encendido</span><span class="chip">MA 3 ↔ MA 5</span></div>
+
+        <div class="note warn">
+          <span class="lbl">El malentendido más común</span>
+          <p>El Cruce Dorado y el Cruce de la Muerte son cruces entre <strong>dos medias móviles</strong>, no entre el precio y una media. Que el precio cruce la media de 200 es otra cosa distinta, y este indicador la reporta por separado en sus alarmas.</p>
+        </div>
+
+        <h3>Las definiciones</h3>
+        <p><strong>Cruce Dorado (Golden Cross).</strong> Ocurre cuando la media de corto plazo —clásicamente la de 50 períodos— cruza hacia arriba por encima de la media de largo plazo, la de 200. Indica un impulso alcista fuerte, y se interpreta generalmente como el inicio o la confirmación de una tendencia alcista prolongada.</p>
+        <p><strong>Cruce de la Muerte (Death Cross).</strong> Es lo inverso: la de 50 cruza hacia abajo por debajo de la de 200. Indica que la presión de venta se intensificó, y se lee como una señal bajista que sugiere el inicio o la prolongación de una tendencia bajista.</p>
+
+        <h3>Cómo funciona acá</h3>
+        <p>El par por defecto es <span class="k">MA 3 ↔ MA 5</span>, que con los valores de fábrica es exactamente EMA(50) contra SMA(200): el cruce clásico. Los dos lados se eligen con un desplegable, así que podés armar cualquier par —por ejemplo 8 contra 21 para operativa mucho más rápida.</p>
+        <p>Cuando ocurre, el indicador dibuja una etiqueta en la vela exacta: dorada debajo de la vela para el Cruce Dorado, roja oscura arriba para el de la Muerte. Podés dejar solo el triángulo sin texto, cambiar el tamaño, y activar una línea vertical que atraviesa el gráfico para alinear el cruce con lo que hizo el precio después. Esa línea viene apagada porque ensucia bastante.</p>
+
+        <div class="note">
+          <span class="lbl">Interpretarlo con honestidad</span>
+          <p>El Cruce Dorado es una señal <strong>rezagada por construcción</strong>: usa medias de 50 y 200 períodos, o sea que para cuando se produce, el movimiento ya lleva un buen tramo recorrido. No sirve para entrar en el momento exacto. Sirve para confirmar un cambio de régimen que ya viene ocurriendo, y para eso es excelente.</p>
+          <p>Por eso tiene sentido acompañarlo con las herramientas que lo anticipan: el relleno muestra las medias acercándose, y la probabilidad de cruce le pone un número a cuánto falta.</p>
+        </div>
+      </section>
+
+      <section id="es-relleno">
+        <h2><span class="n">06</span> El relleno entre medias</h2>
+        <div class="chips"><span class="chip grp">🎨 Relleno entre MAs</span><span class="chip off">apagado</span><span class="chip">MA 3 ↔ MA 5</span></div>
+        <p>Sombrea el área entre dos medias que elegís. Verde cuando la primera está por encima de la segunda, rojo cuando está por debajo, con la transparencia que le pongas.</p>
+        <p>Viene apuntando al mismo par que el Cruce Dorado, y eso es deliberado: <strong>el relleno es la versión continua del cruce</strong>. En vez de marcarte solo el instante, te pinta todo el tiempo de qué lado estás.</p>
+
+        <h3>Las tres cosas que te dice</h3>
+        <ul>
+          <li><strong>El color</strong> es el régimen: verde es territorio de Cruce Dorado, rojo es territorio de Cruce de la Muerte.</li>
+          <li><strong>El cambio de color</strong> es, literalmente, el cruce. Ocurre en la misma vela donde aparece la etiqueta.</li>
+          <li><strong>El grosor de la franja</strong> es la distancia entre las dos medias, o sea la fuerza del impulso. Una franja ancha es una tendencia con convicción. Una franja que se va adelgazando avisa que las medias convergen y que un cruce se está gestando.</li>
+        </ul>
+        <p>Ese tercer punto es el que más se aprovecha en la práctica y el que no da ningún indicador que solo marque el cruce: te deja ver venir el cambio de régimen con semanas de anticipación.</p>
+      </section>
+
+      <section id="es-cono">
+        <h2><span class="n">07</span> El cono de proyección</h2>
+        <div class="chips"><span class="chip grp">🔮 Cono de proyección</span><span class="chip off">apagado</span></div>
+
+        <div class="note warn">
+          <span class="lbl">Antes que nada</span>
+          <p>El cono <strong>no proyecta el precio. Proyecta la media móvil.</strong> Responde a una sola pregunta: si esta media sigue al ritmo que trae, ¿dónde va a estar dentro de N barras? No es un pronóstico de precio y no es una bola de cristal.</p>
+        </div>
+
+        <p>Dibuja, hacia la derecha de la última vela, una banda que se abre. La línea punteada del centro es el rumbo: el valor actual más la pendiente por las barras. La banda alrededor es la incertidumbre.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 220" role="img" aria-label="Diagrama del cono de proyección ensanchándose con el tiempo">
+            <defs>
+              <linearGradient id="coneFade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--accent)" stop-opacity=".30"/>
+                <stop offset="100%" stop-color="var(--accent)" stop-opacity=".08"/>
+              </linearGradient>
+            </defs>
+            <line x1="300" y1="18" x2="300" y2="186" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="292" y="14" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">pasado</text>
+            <text x="308" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">futuro</text>
+            <path d="M30 150 C90 146, 180 132, 300 112" fill="none" stroke="#8E44AD" stroke-width="2.5"/>
+            <path d="M300 112 C380 100, 460 88, 600 62 L600 122 C460 130, 380 122, 300 112 Z" fill="url(#coneFade)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".55"/>
+            <path d="M300 112 L600 92" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <line x1="600" y1="62" x2="600" y2="122" stroke="var(--accent)" stroke-width="1.5"/>
+            <line x1="450" y1="88" x2="450" y2="122" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".6"/>
+            <g font-family="Archivo, sans-serif" font-size="11.5" fill="var(--muted)">
+              <text x="150" y="176">la media, hasta hoy</text>
+              <text x="430" y="150">a 5 barras:</text>
+              <text x="430" y="164">poca duda</text>
+              <text x="500" y="186">a 20 barras: mucha más</text>
+              <text x="612" y="96" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-size="10">rumbo</text>
+            </g>
+          </svg>
+          <figcaption>El cono se ensancha con la raíz del tiempo. Cerca se sabe bastante bien dónde va a estar la media; lejos, casi nada.</figcaption>
+        </figure>
+
+        <p><strong>Por qué se abre.</strong> Porque una media puede desviarse de su rumbo, y cuanto más lejos mirás, más se puede haber desviado. El ancho es proporcional a la volatilidad multiplicada por la raíz del tiempo. Con el ancho en 1 la banda cubre aproximadamente el 68% de los casos —un desvío estándar—; con 2, alrededor del 95%.</p>
+        <p>Esta es la forma honesta de dibujar un pronóstico. Una línea sola sugiere una precisión que no existe; el cono muestra la banda de lo posible. Es la misma forma que usan los bancos centrales en sus <em>fan charts</em> para publicar proyecciones de inflación.</p>
+
+        <h3>El uso concreto que más rinde</h3>
+        <p>Prendé el cono para dos medias y mirá <strong>si los conos se van a tocar dentro del horizonte</strong>. Si se superponen a partir de la barra 6, hay un cruce plausible en el corto plazo. Si ni se rozan, no lo hay. Es la lectura visual de la misma pregunta que responde con un número la tabla de probabilidad.</p>
+      </section>
+
+      <section id="es-probabilidad">
+        <h2><span class="n">08</span> La probabilidad de cruce</h2>
+        <div class="chips"><span class="chip grp">🎲 Probabilidad de cruce</span><span class="chip off">apagada</span></div>
+        <p>Una tabla con diez filas: los cinco pares precio contra media, y los cinco pares media contra media que definiste en los slots de alarmas. Para cada uno estima la probabilidad de que las dos líneas se toquen dentro del horizonte que elijas.</p>
+
+        <h3>Cómo lo calcula, en castellano</h3>
+        <p>Un cruce ocurre cuando la <strong>brecha</strong> entre dos líneas llega a cero. Así que la pregunta "¿van a cruzarse?" es en realidad "¿esta brecha va a llegar a cero?", y eso depende de tres cosas nada más:</p>
+        <ol>
+          <li><strong>Qué tan grande es la brecha hoy.</strong> Cuanto más cerca están, más fácil.</li>
+          <li><strong>Hacia dónde va la brecha.</strong> Si se vienen acercando, ayuda; si se separan, juega en contra.</li>
+          <li><strong>Cuánto tiembla la brecha.</strong> Este es el factor que más pesa. Dos líneas separadas pero con una brecha que da saltos grandes pueden tocarse; dos líneas cerquita con una brecha quieta, no.</li>
+        </ol>
+        <p>Pensalo así: alguien camina por un pasillo con una pared al costado. La probabilidad de que toque la pared depende de a qué distancia está, hacia dónde va caminando, y cuánto se tambalea. Eso es exactamente lo que calcula la fórmula —se llama <em>tiempo de primer paso</em> y es la misma matemática que se usa para calcular la probabilidad de que un precio toque una barrera.</p>
+
+        <div class="note">
+          <span class="lbl">Por qué esto no se puede sobreajustar</span>
+          <p>Es una <strong>fórmula cerrada</strong>, no una curva optimizada contra el pasado. No hay parámetros que alguien haya ajustado hasta que los resultados históricos se vieran bien. Entran tres mediciones del mercado y sale un número. Si dos líneas están muy juntas y la brecha tiembla mucho, la probabilidad es alta; y si no, no.</p>
+        </div>
+
+        <h3>Tres correcciones que la fórmula de manual no trae</h3>
+        <p>La fórmula tal como aparece en los libros da un número sesgado para lo que acá se está midiendo. El módulo lleva tres correcciones, y las tres se midieron por simulación sobre 400.000 barras antes de darlas por buenas.</p>
+
+        <ol>
+          <li><strong>La fórmula es de tiempo continuo; el cruce se mide entre cierres.</strong> El cálculo de libro supone que las líneas pueden tocarse en cualquier instante. Pero un cruce acá se declara comparando cierres: si la brecha se hunde y vuelve dentro de la misma vela, no hubo cruce. Sin corregir, la fórmula contaba esos casos y <strong>exageraba 10 puntos porcentuales en promedio</strong>, hasta 20 con las líneas cerca. La corrección conocida consiste en correr un poco la barrera hacia afuera. El sesgo baja a medio punto.</li>
+
+          <li><strong>La brecha entre dos medias no es un paseo aleatorio: es una curva suave.</strong> Los cambios de una brecha entre medias móviles están correlacionados en un 96% con el cambio anterior. Medir el temblor vela a vela y estirarlo con la raíz del tiempo subestimaba la dispersión real unas tres veces, y eso hacía que proyectar la tendencia de la brecha pareciera mucho más seguro de lo que es. Ahora el temblor se mide directamente a la escala del horizonte, así la suavidad de la curva queda absorbida por la propia medición.</li>
+
+          <li><strong>La tendencia de la brecha se mide con error, y a veces es solo ruido.</strong> Cuando la tendencia medida es chica frente a su propio margen de error, no es una tendencia: es ruido. Ahora se la encoge en proporción a cuánto se distingue de ese ruido. Lo interesante es que los dos tipos de par se comportan al revés: en los pares media contra media la tendencia es información real —sacarla derrumba el poder predictivo a la mitad—, mientras que en los pares precio contra media es casi puro ruido. El encogimiento distingue los dos casos solo, vela a vela.</li>
+        </ol>
+
+        <div class="note">
+          <span class="lbl">Cuánto mejoró, en números</span>
+          <p>Lo que importa es el error de calibración en la zona que la tabla efectivamente muestra, o sea cuando la probabilidad supera el umbral. En los pares media contra media pasó de <strong>29 a 15 puntos porcentuales</strong>; en los pares precio contra media, de <strong>20 a 4</strong>. Dicho de la forma más concreta: antes, cuando el indicador anunciaba entre 80% y 100%, el cruce ocurría el 68% de las veces. Ahora anuncia 91% y ocurre el 81%.</p>
+          <p>Queda sesgo, y conviene saberlo: en los pares media contra media el número sigue siendo algo optimista. Tratá una lectura del 90% como un "muy probable", no como una certeza.</p>
+        </div>
+
+        <h3>Las columnas</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Columna</th><th>Qué muestra</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Línea 1 / Línea 2</td><td>El par. Cada una con el color de su media en el gráfico.</td></tr>
+              <tr><td class="ma">Dir</td><td>Hacia dónde tiene que moverse la brecha para que haya cruce: ↓ si la primera está por encima, ↑ si está por debajo.</td></tr>
+              <tr><td class="ma">Prob.</td><td>La probabilidad de que se toquen dentro del horizonte. Se resalta cuando supera el umbral.</td></tr>
+              <tr><td class="ma">Barra</td><td>En qué barra ocurriría, aproximadamente, si el ritmo actual se mantiene.</td></tr>
+              <tr><td class="ma">Zona $</td><td>El rango de precios donde ocurriría el cruce. Se ensancha con el tiempo, igual que el cono.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Por qué a veces ves un guion</span>
+          <p>La <strong>Barra</strong> y la <strong>Zona</strong> solo aparecen cuando la probabilidad supera el umbral —60% por defecto—. Por debajo muestran "—", y es a propósito: darte un precio exacto para un cruce que probablemente no va a ocurrir sería venderte una precisión que no existe. Si querés verlas siempre, bajá el umbral; pero sabé lo que estás mirando.</p>
+          <p>Hay un segundo motivo por el que pueden mostrar "—" aun con probabilidad alta: si la tendencia de la brecha no se distingue de su propio ruido, se la encoge a cero, y sin tendencia no hay forma de estimar <em>cuándo</em> se cruzarían. La probabilidad de que se toquen sigue siendo válida —eso depende del temblor, no de la tendencia—, pero la fecha no.</p>
+        </div>
+
+        <h3>Cómo interpretarla</h3>
+        <ul>
+          <li><strong>Probabilidad alta con Dir ↓ en el par precio contra la media de 200:</strong> el precio está cerca de perder su soporte de fondo.</li>
+          <li><strong>Probabilidad alta en un par media contra media:</strong> se está gestando un cruce de medias, potencialmente un Cruce Dorado o de la Muerte.</li>
+          <li><strong>Probabilidad baja con las líneas visiblemente cerca:</strong> están cerca pero sin volatilidad para tocarse. Un mercado dormido. Suele ser la antesala de una expansión.</li>
+        </ul>
+
+        <div class="note warn">
+          <span class="lbl">Sobre el horizonte</span>
+          <p>El horizonte se mide en <strong>barras del gráfico</strong>, no de la temporalidad de la media. En un gráfico de 1 hora con una media diaria, un horizonte de 10 significa "en las próximas 10 barras de 1 hora", o sea poco más de una jornada.</p>
+        </div>
+      </section>
+
+      <section id="es-banda">
+        <h2><span class="n">09</span> La banda anti-ruido</h2>
+        <div class="chips"><span class="chip grp">🎛️ Banda anti-ruido</span><span class="chip off">apagada</span></div>
+        <p>Es el filtro de calidad que atraviesa todo el indicador. Cambia la definición de "cruce" para <strong>todos</strong> los cruces: las diez alarmas de precio contra media, las diez de los slots, y el Cruce Dorado y de la Muerte.</p>
+
+        <h3>El problema que resuelve</h3>
+        <p>En un mercado lateral, el precio roza la media una y otra vez. Cada roce es técnicamente un cruce, y dispara una alarma. Podés terminar con diez avisos en una tarde, ninguno de los cuales significa nada. Eso se llama <em>whipsaw</em>, y es la razón número uno por la que la gente abandona los sistemas de medias móviles.</p>
+
+        <h3>Cómo lo resuelve</h3>
+        <p>Con la banda activa, un cruce se declara recién cuando las dos líneas se separan <strong>más que el temblor normal del mercado</strong>, medido como un múltiplo del ATR. Y una vez declarado, no vuelve a girar hasta que la separación cruce la banda del otro lado. Eso se llama histéresis: hay que salir de verdad para que cuente.</p>
+        <p>El ancho por defecto es 0,25 ATR —un cuarto del rango promedio— con un ATR de 14 barras. Subilo si querés menos señales y más limpias; bajalo si sentís que se pierde movimientos. El costo siempre es el mismo: un poco de retraso.</p>
+
+        <div class="note">
+          <span class="lbl">Compatibilidad</span>
+          <p>Con la banda apagada —que es como viene— el comportamiento es idéntico, línea por línea, al que tenía el indicador antes de que existiera esta función. Si actualizaste desde una versión anterior, tus alertas siguen funcionando exactamente igual.</p>
+        </div>
+      </section>
+
+      <section id="es-hilo">
+        <h2><span class="n">10</span> Cómo se conecta todo</h2>
+        <p class="lead">Las funciones no son una bolsa de cosas sueltas. Cuatro de ellas responden la misma pregunta —<strong>¿va a cruzar?</strong>— en cuatro momentos distintos.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 250" role="img" aria-label="Diagrama de los cuatro tiempos: probabilidad, cono, relleno y etiqueta del cruce">
+            <line x1="42" y1="62" x2="598" y2="62" stroke="var(--rule)" stroke-width="2"/>
+            <g font-family="Archivo, sans-serif">
+              <g>
+                <circle cx="70" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="70" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">1</text>
+                <text x="70" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">ANTES</text>
+                <text x="70" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Probabilidad</text>
+                <text x="70" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">te da el número</text>
+                <text x="70" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">68%, en ~6 barras</text>
+              </g>
+              <g>
+                <circle cx="246" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="246" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">2</text>
+                <text x="246" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">ANTES, VISUAL</text>
+                <text x="246" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Cono</text>
+                <text x="246" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">ves si los conos</text>
+                <text x="246" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">se van a tocar</text>
+              </g>
+              <g>
+                <circle cx="422" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="422" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">3</text>
+                <text x="422" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">DURANTE</text>
+                <text x="422" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Relleno</text>
+                <text x="422" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">la franja se va</text>
+                <text x="422" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">adelgazando</text>
+              </g>
+              <g>
+                <circle cx="570" cy="62" r="9" fill="var(--accent)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="570" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#151A21" font-weight="600">4</text>
+                <text x="570" y="36" text-anchor="middle" font-size="11" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-weight="600">EL MOMENTO</text>
+                <text x="570" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">La etiqueta</text>
+                <text x="570" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">marca la vela</text>
+                <text x="570" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">y el color cambia</text>
+              </g>
+              <rect x="42" y="168" width="556" height="58" rx="5" fill="var(--surface-2)" stroke="var(--rule)"/>
+              <text x="60" y="190" font-size="11.5" font-weight="600" fill="var(--ink)">Y en paralelo, el estado del sistema:</text>
+              <text x="60" y="210" font-size="11" fill="var(--muted)">el Ritmo dice si cada media tiene fuerza · el Abanico dice si todas están de acuerdo</text>
+            </g>
+          </svg>
+          <figcaption>La banda anti-ruido atraviesa los cuatro tiempos: decide qué cuenta como cruce en todos ellos.</figcaption>
+        </figure>
+
+        <p>Si tuvieras que quedarte con una sola idea de este manual, que sea ésta. La mayoría de los operadores solo tiene el paso 4: se enteran del cruce cuando ya pasó. Los pasos 1 a 3 son la diferencia entre reaccionar y anticipar.</p>
+      </section>
+
+      <section id="es-alarmas">
+        <h2><span class="n">11</span> Las 24 alarmas</h2>
+        <p>Para crear una alarma: clic derecho sobre el gráfico → <em>Añadir alerta</em>, o el ícono del reloj. En <em>Condición</em>, elegí el indicador <span class="k">MAs MTF (LFF)</span> y después la alarma que quieras del desplegable. Todos los mensajes salen en los tres idiomas a la vez, así que no hace falta configurar nada más.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th class="num">Cant.</th><th>Familia</th><th>Para qué sirve</th></tr></thead>
+            <tbody>
+              <tr><td class="num">10</td><td>Precio ↔ MA</td><td>El precio cruza hacia arriba o hacia abajo cada una de las cinco medias. Respetan el interruptor "Mostrar" de cada media: si la ocultás, su alarma no dispara.</td></tr>
+              <tr><td class="num">10</td><td>MA ↔ MA (slots)</td><td>Cinco pares configurables de media contra media, cada uno con su cruce alcista y bajista. Se arman en <span class="k">🔔 Slots MA↔MA</span> y hay que activar el slot para que la alarma funcione.</td></tr>
+              <tr><td class="num">2</td><td>Comodín</td><td>"Cualquier cruce precio contra media" y "cualquier cruce media contra media". Una sola alerta que cubre todo.</td></tr>
+              <tr><td class="num">2</td><td>Golden / Death Cross</td><td>El par elegido en el grupo ✨. Las más útiles para posiciones de largo plazo.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Consejo</span>
+          <p>Si vas a poner alarmas, prendé antes la banda anti-ruido. Es la diferencia entre recibir tres avisos útiles al mes y treinta inútiles.</p>
+        </div>
+      </section>
+
+      <section id="es-recetas">
+        <h2><span class="n">12</span> Recetas de configuración</h2>
+        <p>Cuatro puntos de partida según para qué lo quieras usar. No son reglas: son configuraciones sensatas desde donde arrancar a experimentar.</p>
+
+        <div class="recipes">
+          <div class="recipe">
+            <h4>Inversor de largo plazo</h4>
+            <p class="who">Gráfico diario o semanal. Querés saber en qué régimen está el activo, no operar el día a día.</p>
+            <dl>
+              <dt>Medias</dt><dd>Ocultá MA 1 y MA 2. Dejá 50, 100 y 200.</dd>
+              <dt>Prendé</dt><dd>Relleno (MA 3 ↔ MA 5), abanico, ritmo.</dd>
+              <dt>Banda</dt><dd>Activada, ancho 0,5.</dd>
+              <dt>Apagá</dt><dd>Cono y probabilidad.</dd>
+              <dt>Alarmas</dt><dd>Solo Golden y Death Cross.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Swing trader</h4>
+            <p class="who">Gráfico diario, operaciones de días a semanas. Querés el contexto completo.</p>
+            <dl>
+              <dt>Medias</dt><dd>Las cinco, en la temporalidad del gráfico.</dd>
+              <dt>Prendé</dt><dd>Ritmo, abanico, últ. cruce, relleno en MA 1 ↔ MA 3.</dd>
+              <dt>Probabilidad</dt><dd>Activada, horizonte 10, umbral 60%.</dd>
+              <dt>Banda</dt><dd>Activada, ancho 0,25.</dd>
+              <dt>Alarmas</dt><dd>Precio ↔ MA 3, más un slot MA 1 ↔ MA 3.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Solo el cruce, limpio</h4>
+            <p class="who">No querés ruido. Querés la de 50, la de 200 y el cruce, y nada más.</p>
+            <dl>
+              <dt>Medias</dt><dd>Ocultá MA 1, MA 2 y MA 4.</dd>
+              <dt>Prendé</dt><dd>Relleno y la línea vertical del cruce.</dd>
+              <dt>Tabla</dt><dd>Apagada, o solo con la fila de abanico.</dd>
+              <dt>Banda</dt><dd>Activada, ancho 0,5.</dd>
+              <dt>Apagá</dt><dd>Todo lo demás.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Intradía con contexto superior</h4>
+            <p class="who">Operás en 15 minutos o 1 hora pero no querés perder de vista el marco mayor.</p>
+            <dl>
+              <dt>MA 1 y 2</dt><dd>Temporalidad vacía: siguen el gráfico.</dd>
+              <dt>MA 3, 4 y 5</dt><dd>Temporalidad <span class="k">D</span>: contexto diario.</dd>
+              <dt>Prendé</dt><dd>Abanico —acá el orden por tiempo cubierto hace su trabajo—, ritmo, últ. cruce.</dd>
+              <dt>Banda</dt><dd>Activada, ancho 0,25.</dd>
+              <dt>Ojo</dt><dd>El cono queda angosto con medias diarias. Ver limitaciones.</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section id="es-limites">
+        <h2><span class="n">13</span> Limitaciones</h2>
+        <p class="lead">Leer esta sección es parte de usar bien la herramienta. Ninguna de estas cosas es un defecto a corregir: son las fronteras reales de lo que estos cálculos pueden decir.</p>
+        <ol>
+          <li><strong>El cono proyecta la media, no el precio.</strong> Es un escenario de "si todo sigue igual". El precio puede hacer cualquier cosa mientras tanto.</li>
+          <li><strong>El cono queda más angosto de lo que debería para medias en temporalidad superior a la del gráfico.</strong> La volatilidad se mide en barras del gráfico, y una media diaria vista en 1 hora casi no cambia dentro del día y da un salto en el borde. Con las medias en la temporalidad del gráfico, el cono es correcto.</li>
+          <li><strong>El horizonte de la probabilidad se mide en barras del gráfico</strong>, no de la temporalidad de la media.</li>
+          <li><strong>El Golden Cross y el Death Cross son rezagados por construcción.</strong> Confirman, no anticipan.</li>
+          <li><strong>Las medias móviles funcionan mal en mercados laterales.</strong> Es su debilidad estructural y ningún filtro la elimina del todo. La banda anti-ruido la mitiga; no la resuelve.</li>
+          <li><strong>Nada de esto es una recomendación de inversión.</strong> Es análisis técnico: probabilidades, no certezas.</li>
+        </ol>
+      </section>
+
+      <section id="es-faq">
+        <h2><span class="n">14</span> Preguntas frecuentes</h2>
+        <div class="faq">
+          <details>
+            <summary>¿Repinta?</summary>
+            <p>Las medias multi-temporalidad se piden sin <em>lookahead</em>, así que no miran hacia el futuro. La vela en formación se actualiza en vivo como en cualquier indicador, y eso incluye a las etiquetas de los cruces: una etiqueta puede aparecer y desaparecer dentro de la vela en curso hasta que cierre. Una vez cerrada la vela, nada se mueve hacia atrás.</p>
+          </details>
+          <details>
+            <summary>Actualicé el indicador. ¿Pierdo mi configuración o mis alertas?</summary>
+            <p>No. Las perillas existentes conservan su orden y posición exactos, y las alarmas conservan su orden y sus títulos, justamente para que las configuraciones guardadas y las alertas ya creadas sigan apuntando a lo mismo. Todo lo nuevo se agregó al final.</p>
+          </details>
+          <details>
+            <summary>¿Por qué la tabla de probabilidad muestra guiones en Barra y Zona?</summary>
+            <p>Porque esa probabilidad no llegó al umbral, 60% por defecto. Es intencional: no se muestra un precio exacto para un cruce improbable. Bajá el umbral si querés verlas de todos modos.</p>
+          </details>
+          <details>
+            <summary>Cambié las medias y el Cruce Dorado dejó de tener sentido. ¿Qué pasó?</summary>
+            <p>El cruce usa el par que elijas en el grupo ✨, por defecto MA 3 y MA 5. Si reconfiguraste esas dos medias con otras longitudes, el cruce sigue calculándose sobre ellas. Ajustá los dos desplegables para que apunten a las medias que ahora hacen de rápida y lenta.</p>
+          </details>
+          <details>
+            <summary>¿Sirve para cripto y forex?</summary>
+            <p>Sí, todo funciona igual. La única salvedad es la VWMA: pondera por volumen, y en forex y en cripto spot el volumen que reporta el exchange es parcial, así que esa media en particular pierde parte de su sentido. Las otras ocho no tienen ese problema.</p>
+          </details>
+          <details>
+            <summary>¿Puedo usarlo en temporalidades distintas de la diaria?</summary>
+            <p>Sí. Los valores de fábrica ponen las cinco medias en diario, pero podés cambiar cada una por separado, o vaciar el campo para que sigan la temporalidad del gráfico.</p>
+          </details>
+          <details>
+            <summary>El panel de ajustes está en tres idiomas a la vez. ¿Se puede dejar en uno solo?</summary>
+            <p>No, y no es un descuido. Pine Script fija los textos del panel al compilar: no hay forma de que un botón los cambie. Por eso el panel está escrito en los tres idiomas. El selector de idioma sí cambia lo que se dibuja en el gráfico: los encabezados de la tabla, la fila del abanico y las etiquetas de los cruces.</p>
+          </details>
+          <details>
+            <summary>¿Tiene versión paga?</summary>
+            <p>No. Es gratuito, de código abierto bajo licencia MPL 2.0, y no hay funciones bloqueadas ni versión premium.</p>
+          </details>
+        </div>
+      </section>
+
+    
+    </article>
+  </div>
+</div>
+
+<div class="wrap" data-lang-block="en" hidden>
+  <details class="toc-mobile">
+    <summary>Manual contents</summary>
+    <nav class="rail" aria-label="Contents">
+        <ol>
+          <li><a href="#en-que-es"><span class="n">01</span> What it is and who it is for</a></li>
+          <li><a href="#en-instalacion"><span class="n">02</span> Installation and first run</a></li>
+          <li><a href="#en-medias"><span class="n">03</span> The five moving averages</a></li>
+          <li><a href="#en-tabla"><span class="n">04</span> The summary table</a></li>
+          <li><a href="#en-cruces"><span class="n">05</span> Golden Cross and Death Cross</a></li>
+          <li><a href="#en-relleno"><span class="n">06</span> The fill between averages</a></li>
+          <li><a href="#en-cono"><span class="n">07</span> The projection cone</a></li>
+          <li><a href="#en-probabilidad"><span class="n">08</span> The cross probability</a></li>
+          <li><a href="#en-banda"><span class="n">09</span> The noise band</a></li>
+          <li><a href="#en-hilo"><span class="n">10</span> How it all fits together</a></li>
+          <li><a href="#en-alarmas"><span class="n">11</span> The 24 alerts</a></li>
+          <li><a href="#en-recetas"><span class="n">12</span> Setup recipes</a></li>
+          <li><a href="#en-limites"><span class="n">13</span> Limitations</a></li>
+          <li><a href="#en-faq"><span class="n">14</span> Frequently asked questions</a></li>
+        </ol>
+    </nav>
+  </details>
+
+  <div class="layout">
+    <nav class="rail rail-desktop" aria-label="Contents">
+      <p class="rail-title">Contents</p>
+        <ol>
+          <li><a href="#en-que-es"><span class="n">01</span> What it is and who it is for</a></li>
+          <li><a href="#en-instalacion"><span class="n">02</span> Installation and first run</a></li>
+          <li><a href="#en-medias"><span class="n">03</span> The five moving averages</a></li>
+          <li><a href="#en-tabla"><span class="n">04</span> The summary table</a></li>
+          <li><a href="#en-cruces"><span class="n">05</span> Golden Cross and Death Cross</a></li>
+          <li><a href="#en-relleno"><span class="n">06</span> The fill between averages</a></li>
+          <li><a href="#en-cono"><span class="n">07</span> The projection cone</a></li>
+          <li><a href="#en-probabilidad"><span class="n">08</span> The cross probability</a></li>
+          <li><a href="#en-banda"><span class="n">09</span> The noise band</a></li>
+          <li><a href="#en-hilo"><span class="n">10</span> How it all fits together</a></li>
+          <li><a href="#en-alarmas"><span class="n">11</span> The 24 alerts</a></li>
+          <li><a href="#en-recetas"><span class="n">12</span> Setup recipes</a></li>
+          <li><a href="#en-limites"><span class="n">13</span> Limitations</a></li>
+          <li><a href="#en-faq"><span class="n">14</span> Frequently asked questions</a></li>
+        </ol>
+    </nav>
+
+    <article>
+      <section id="en-que-es">
+        <h2><span class="n">01</span> What it is and who it is for</h2>
+        <p class="lead">Five independent moving averages on the price chart, each configurable down to the last detail, plus a set of readings that tell you what those averages are doing with each other.</p>
+        <p>Almost every moving-average indicator out there does one thing: it draws the lines. This one draws them too, but it also answers the questions you ask yourself while looking at them. Is this average actually trending, or drifting sideways? Do they all agree? How long until they cross? Is that cross I am seeing real, or just noise from a range-bound market?</p>
+        <p>It is built for anyone who trades or invests with the trend and uses moving averages as the backbone of their analysis: swing traders, medium-term investors, and also anyone who just wants the 50/200 cross marked cleanly and nothing else. It is not a strategy and it does not issue buy or sell orders: it is a reading tool.</p>
+        <h3>What comes in the box</h3>
+        <ul>
+          <li><strong>9 average types</strong> for each of the five: SMA, EMA, WMA, RMA, HMA, VWMA, TEMA, KAMA and JMA.</li>
+          <li><strong>Multi-timeframe</strong>: each average can be computed on a timeframe other than the chart's. You can watch the daily 200 SMA while you trade the 1-hour chart.</li>
+          <li><strong>Trilingual</strong>: Spanish, English and Portuguese.</li>
+          <li><strong>24 configurable alerts</strong>.</li>
+          <li><strong>Open source</strong> under the MPL 2.0 licence and free, with no paid tier and no locked features.</li>
+        </ul>
+      </section>
+
+      <section id="en-instalacion">
+        <h2><span class="n">02</span> Installation and first run</h2>
+        <p>Look it up in TradingView's indicator search by its name, <span class="k">Adv. MAs MTF (Eng/Spa/Port)(LFF)</span>, and add it to your chart. Nothing else is needed.</p>
+
+        <h3>What you will see straight away</h3>
+        <p>Five moving averages, a summary table in the top right corner and, if the instrument has had any, the golden and death cross labels on the candles.</p>
+
+        <div class="tw">
+          <table>
+            <thead>
+              <tr><th>Average</th><th>Type</th><th class="num">Length</th><th>Colour</th><th class="num">Width</th><th>What it is for</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="ma">MA 1</td><td>EMA</td><td class="num">8</td><td><span class="sw" style="background:#2962FF"></span>blue</td><td class="num">1</td><td>Very short-term pulse</td></tr>
+              <tr><td class="ma">MA 2</td><td>EMA</td><td class="num">21</td><td><span class="sw" style="background:#E53935"></span>red</td><td class="num">1</td><td>Short term</td></tr>
+              <tr><td class="ma">MA 3</td><td>EMA</td><td class="num">50</td><td><span class="sw" style="background:#E5C100"></span>yellow</td><td class="num">1</td><td>Swing reference</td></tr>
+              <tr><td class="ma">MA 4</td><td>SMA</td><td class="num">100</td><td><span class="sw" style="background:#43A047"></span>green</td><td class="num">1</td><td>Intermediate trend</td></tr>
+              <tr><td class="ma">MA 5</td><td>SMA</td><td class="num">200</td><td><span class="sw" style="background:#8E44AD"></span>purple</td><td class="num">2</td><td>Underlying trend</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">The first surprise</span>
+          <p>All five averages come set to the <strong>daily timeframe</strong>, not the chart's. If you open a 1-hour chart you will see the daily averages drawn on top of it — which is exactly the point of the indicator: higher-timeframe context without switching charts. If you want them to follow the chart's timeframe, clear the <span class="k">Timeframe</span> field on each average and leave it empty.</p>
+        </div>
+
+        <p>The 200 is set to width 2 on purpose: it is the market's structural reference line and it helps to tell it apart from the other four at a glance.</p>
+
+        <h3>Everything heavy comes switched off</h3>
+        <p>The projection cone, the probability table, the fill and the noise band all ship <strong>disabled</strong>. That is deliberate: when you add it you get a clean chart, and you switch on what you actually need. This manual is roughly ordered that way, from the basics to the optional.</p>
+      </section>
+
+      <section id="en-medias">
+        <h2><span class="n">03</span> The five moving averages</h2>
+        <p>Each average has its own fourteen controls grouped under <span class="k">📈 MA 1</span> … <span class="k">📈 MA 5</span>. Four of them really matter: type, length, timeframe and source.</p>
+
+        <h3>Which type to use</h3>
+        <p>The difference between the nine types comes down to one thing: <strong>how much the recent past weighs against the distant past</strong>. The more recent data weighs, the sooner the average reacts — and the more often it is wrong.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Type</th><th>What makes it different</th><th>When to use it</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">SMA</td><td>Simple average: every bar weighs the same.</td><td>The slowest and steadiest. It is the institutional reference: when the market talks about "the 200", it means an SMA.</td></tr>
+              <tr><td class="ma">EMA</td><td>Weights recent bars more, with exponential decay.</td><td>The most widely used for trend following. Reacts sooner than the SMA without turning erratic.</td></tr>
+              <tr><td class="ma">WMA</td><td>Linearly decreasing weights.</td><td>Halfway between SMA and EMA. Good if the EMA feels too jumpy for you.</td></tr>
+              <tr><td class="ma">RMA</td><td>Wilder's average, the one used inside the RSI and the ATR. Very smooth.</td><td>When you want to filter noise aggressively. Roughly equivalent to an EMA of twice the period.</td></tr>
+              <tr><td class="ma">HMA</td><td>Hull: designed for minimal lag without losing smoothness.</td><td>To spot turns early. Very reactive, which is exactly why it fools you in ranges.</td></tr>
+              <tr><td class="ma">VWMA</td><td>Weights each bar by its volume.</td><td>Where volume is real and meaningful: stocks, futures, indices. In forex and spot crypto the reported volume is partial, so it contributes less.</td></tr>
+              <tr><td class="ma">TEMA</td><td>Triple EMA: almost removes the lag.</td><td>Fast trading. The cost is overshoot: it runs past the turn on sharp reversals.</td></tr>
+              <tr><td class="ma">KAMA</td><td>Kaufman's adaptive: speeds up on its own when there is trend and slows down when there is noise.</td><td>Instruments that alternate between trending and ranging phases. It self-regulates.</td></tr>
+              <tr><td class="ma">JMA</td><td>Jurik: smooth and low-lag at the same time. Has two global parameters, Phase and Power.</td><td>When you want the best of both worlds and do not mind two extra knobs.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">The JMA parameters</span>
+          <p>They live in the <span class="k">🧮 JMA global parameters</span> group and affect every average you set to JMA. They ship as Phase 50 and Power 2, which is Mark Jurik's most widely reproduced standard setting. Phase 0 gives more lag; Phase above 0 gives less lag in exchange for some overshoot. Higher Power smooths more and lags more.</p>
+        </div>
+
+        <h3>Multi-timeframe</h3>
+        <p>Each average's <span class="k">Timeframe</span> field accepts any TradingView timeframe. Empty means "the chart's". It is the indicator's most powerful feature and also the most misread, so a clarification is in order: a daily average seen on a 1-hour chart <strong>is not recalculated every hour</strong>. It stays put all day and steps once the daily candle closes. That is correct behaviour, not a bug — but it explains why it looks like a staircase when you zoom in.</p>
+
+        <h3>Source, colour, width and style</h3>
+        <p>The <span class="k">Source</span> is which price it is computed on: close, open, high, low, or the <span class="k">hl2</span>, <span class="k">hlc3</span> and <span class="k">ohlc4</span> averages. Switching to an average smooths the input before the average is computed and reduces the pull of long wicks. Colour, width and style (solid, dashed, dotted) are purely visual.</p>
+
+        <h3>The on-chart labels</h3>
+        <p>Each average can show a label to its right with its technical identifier — <span class="k">EMA(50) 1D</span> — and you choose which parts to show (type, length, timeframe), at what distance and at what size. The format is universal, identical in all three languages.</p>
+      </section>
+
+      <section id="en-tabla">
+        <h2><span class="n">04</span> The summary table</h2>
+        <div class="chips"><span class="chip grp">📋 Summary table</span><span class="chip on">on</span></div>
+        <p>One row per average and, optionally, a final alignment row. You can move it to any of the nine corners, change its size and colours, and decide whether it includes the averages you have hidden.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Column</th><th>What it shows</th><th>How to read it</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Colour</td><td>The line's colour on the chart.</td><td>So you do not have to memorise which is which.</td></tr>
+              <tr><td class="ma">Type</td><td>SMA, EMA, HMA…</td><td>—</td></tr>
+              <tr><td class="ma">Length</td><td>The period.</td><td>—</td></tr>
+              <tr><td class="ma">Timeframe</td><td>Which timeframe it is computed on.</td><td>If it reads <span class="k">1D</span> and you are on a 1-hour chart, that average is higher-timeframe context.</td></tr>
+              <tr><td class="ma">Dist. %</td><td>Distance from price to the average, as a percentage.</td><td>Positive = price is above. It measures how stretched price is: +12% above the 200 is usually a lot.</td></tr>
+              <tr><td class="ma">Dist. $</td><td>The same distance in the instrument's units.</td><td>Useful for sizing a stop.</td></tr>
+              <tr><td class="ma">Rate</td><td>How fast the average is rising or falling, as a % of its own value per bar.</td><td>See below.</td></tr>
+              <tr><td class="ma">Last x</td><td>How many bars since price last crossed that average.</td><td>Low number = fresh signal. Very high number = mature move.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The Rate column</h3>
+        <p>It shows something like <span class="k">↗ +0.085%</span>. It takes how much the average moved over the last <span class="k">N</span> bars — 20 by default, adjustable under <span class="k">📐 Rate window</span> — divides by N and expresses it as a percentage of the average's current value.</p>
+        <p><strong>What it tells you.</strong> It separates an average that is genuinely trending from one drifting sideways. And that distinction matters more than it looks: an average can sit below price — a bullish reading — while flattening out at the same time. That is not a healthy uptrend, it is a trend losing steam. The arrow tells you before price does.</p>
+        <p>The arrow is ↗ for rising, ↘ for falling and → for flat. You set the "flat" threshold yourself under <span class="k">Flat threshold</span>, 0.02% per bar by default. Because the figure is normalised as a percentage, it is comparable between a $5 instrument and a $5,000 one, and across timeframes.</p>
+        <p><strong>Typical reading:</strong> every arrow pointing the same way is a healthy trend. The fast ones turning while the slow ones hold is a change forming, not yet confirmed.</p>
+
+        <h3>The alignment row: the fan</h3>
+        <p>The last row reads something like <span class="k">Fan: BULLISH FAN · price above 5/5</span>. It sorts the averages from fastest to slowest and checks whether their values ended up stacked in that same order.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 210" role="img" aria-label="Three diagrams comparing bullish, bearish and mixed fan">
+            <g font-family="IBM Plex Mono, monospace" font-size="11">
+              <g transform="translate(10,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bull-wash)" stroke="var(--rule)"/>
+                <path d="M14 118 C60 108, 120 78, 178 34" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 126 C60 118, 120 92, 178 52" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 132 C60 126, 120 104, 178 70" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 137 C60 133, 120 116, 178 88" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 141 C60 139, 120 127, 178 106" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bull)" font-weight="600">BULLISH FAN</text>
+              </g>
+              <text x="106" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">fast on top,</text>
+              <text x="106" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">slow at the bottom</text>
+
+              <g transform="translate(224,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bear-wash)" stroke="var(--rule)"/>
+                <path d="M14 34 C60 78, 120 108, 178 118" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 52 C60 92, 120 118, 178 126" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 70 C60 104, 120 126, 178 132" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 88 C60 116, 120 133, 178 137" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 106 C60 127, 120 139, 178 141" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bear)" font-weight="600">BEARISH FAN</text>
+              </g>
+              <text x="320" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">fast at the bottom,</text>
+              <text x="320" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">slow on top</text>
+
+              <g transform="translate(438,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+                <path d="M14 80 C60 50, 120 118, 178 62" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 62 C60 106, 120 60, 178 104" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 104 C60 74, 120 100, 178 78" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 92 C60 96, 120 82, 178 92" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 74 C60 88, 120 90, 178 86" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--muted)" font-weight="600">MIXED</text>
+              </g>
+              <text x="534" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">tangled:</text>
+              <text x="534" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">no agreement</text>
+            </g>
+          </svg>
+          <figcaption>The three possible states of the fan. The thickest line is the 200.</figcaption>
+        </figure>
+
+        <p><strong>What it tells you.</strong> A clean fan is the classic signature of a strong trend: every horizon agrees at the same time. When it tangles and turns MIXED, that is usually the end or the pause of the move, not its continuation.</p>
+        <p>The <span class="k">price above X/5</span> adds where price stands relative to the group. A 5/5 with a bullish fan is the cleanest reading you will get. A 2/5 with a bullish fan warns you that price is already correcting back into the averages, even though the averages themselves have not broken order yet.</p>
+
+        <div class="note">
+          <span class="lbl">A method detail that matters</span>
+          <p>Each average's speed is <strong>not measured by its length</strong>, but by the time it covers: length multiplied by the duration of its timeframe. Sorting by length alone would be wrong the moment you mix timeframes, because a weekly 8 EMA covers almost two months and is far slower than a 5-minute 200 SMA, which covers less than a day. With every average on the same timeframe — the default case — the result is identical.</p>
+        </div>
+      </section>
+
+      <section id="en-cruces">
+        <h2><span class="n">05</span> Golden Cross and Death Cross</h2>
+        <div class="chips"><span class="chip grp">✨ Golden / Death Cross</span><span class="chip on">on</span><span class="chip">MA 3 ↔ MA 5</span></div>
+
+        <div class="note warn">
+          <span class="lbl">The most common misunderstanding</span>
+          <p>The Golden Cross and the Death Cross are crosses between <strong>two moving averages</strong>, not between price and an average. Price crossing the 200 is a different thing, and this indicator reports it separately in its alerts.</p>
+        </div>
+
+        <h3>The definitions</h3>
+        <p><strong>Golden Cross.</strong> It happens when the short-term average — classically the 50-period one — crosses upward above the long-term average, the 200. It signals strong bullish momentum, and it is generally read as the start or the confirmation of a prolonged uptrend.</p>
+        <p><strong>Death Cross.</strong> The inverse: the 50 crosses downward below the 200. It signals that selling pressure has intensified, and it is read as a bearish signal suggesting the start or the extension of a downtrend.</p>
+
+        <h3>How it works here</h3>
+        <p>The default pair is <span class="k">MA 3 ↔ MA 5</span>, which with the factory settings is exactly EMA(50) against SMA(200): the classic cross. Both sides are picked from a dropdown, so you can build any pair — 8 against 21, for instance, for much faster trading.</p>
+        <p>When it happens, the indicator draws a label on the exact candle: gold below the candle for the Golden Cross, dark red above it for the Death Cross. You can keep just the triangle without text, change the size, and switch on a vertical line running through the chart to line the cross up against what price did afterwards. That line is off by default because it clutters the view.</p>
+
+        <div class="note">
+          <span class="lbl">Reading it honestly</span>
+          <p>The Golden Cross is a <strong>lagging signal by construction</strong>: it uses 50 and 200-period averages, so by the time it fires the move already has a good stretch behind it. It is not for entering at the exact moment. It is for confirming a regime change that is already under way — and for that it is excellent.</p>
+          <p>That is why it makes sense to pair it with the tools that anticipate it: the fill shows the averages converging, and the cross probability puts a number on how long is left.</p>
+        </div>
+      </section>
+
+      <section id="en-relleno">
+        <h2><span class="n">06</span> The fill between averages</h2>
+        <div class="chips"><span class="chip grp">🎨 Fill between MAs</span><span class="chip off">off</span><span class="chip">MA 3 ↔ MA 5</span></div>
+        <p>It shades the area between two averages you choose. Green when the first is above the second, red when it is below, at whatever transparency you set.</p>
+        <p>It ships pointing at the same pair as the Golden Cross, and that is deliberate: <strong>the fill is the continuous version of the cross</strong>. Instead of marking only the instant, it paints which side you are on the whole time.</p>
+
+        <h3>The three things it tells you</h3>
+        <ul>
+          <li><strong>The colour</strong> is the regime: green is Golden Cross territory, red is Death Cross territory.</li>
+          <li><strong>The colour change</strong> is, literally, the cross. It happens on the same candle where the label appears.</li>
+          <li><strong>The band's thickness</strong> is the distance between the two averages, that is, the strength of the move. A wide band is a trend with conviction. A band that keeps thinning warns you that the averages are converging and a cross is brewing.</li>
+        </ul>
+        <p>That third point is the one that pays off most in practice, and the one no indicator that only marks the cross can give you: it lets you see the regime change coming weeks in advance.</p>
+      </section>
+
+      <section id="en-cono">
+        <h2><span class="n">07</span> The projection cone</h2>
+        <div class="chips"><span class="chip grp">🔮 Projection cone</span><span class="chip off">off</span></div>
+
+        <div class="note warn">
+          <span class="lbl">First of all</span>
+          <p>The cone <strong>does not project price. It projects the moving average.</strong> It answers one question only: if this average keeps the pace it currently has, where will it be N bars from now? It is not a price forecast and it is not a crystal ball.</p>
+        </div>
+
+        <p>It draws, to the right of the last candle, a band that opens up. The dashed centre line is the course: the current value plus the slope times the bars. The band around it is the uncertainty.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 220" role="img" aria-label="Diagram of the projection cone widening over time">
+            <defs>
+              <linearGradient id="coneFadeEn" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--accent)" stop-opacity=".30"/>
+                <stop offset="100%" stop-color="var(--accent)" stop-opacity=".08"/>
+              </linearGradient>
+            </defs>
+            <line x1="300" y1="18" x2="300" y2="186" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="292" y="14" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">past</text>
+            <text x="308" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">future</text>
+            <path d="M30 150 C90 146, 180 132, 300 112" fill="none" stroke="#8E44AD" stroke-width="2.5"/>
+            <path d="M300 112 C380 100, 460 88, 600 62 L600 122 C460 130, 380 122, 300 112 Z" fill="url(#coneFadeEn)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".55"/>
+            <path d="M300 112 L600 92" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <line x1="600" y1="62" x2="600" y2="122" stroke="var(--accent)" stroke-width="1.5"/>
+            <line x1="450" y1="88" x2="450" y2="122" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".6"/>
+            <g font-family="Archivo, sans-serif" font-size="11.5" fill="var(--muted)">
+              <text x="150" y="176">the average, up to today</text>
+              <text x="430" y="150">5 bars out:</text>
+              <text x="430" y="164">little doubt</text>
+              <text x="486" y="186">20 bars out: a great deal more</text>
+              <text x="612" y="96" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-size="10">course</text>
+            </g>
+          </svg>
+          <figcaption>The cone widens with the square root of time. Close by you know fairly well where the average will be; far out, hardly at all.</figcaption>
+        </figure>
+
+        <p><strong>Why it opens up.</strong> Because an average can drift off its course, and the further out you look, the more it may have drifted. The width is proportional to volatility times the square root of time. With the width set to 1 the band covers roughly 68% of cases — one standard deviation; with 2, around 95%.</p>
+        <p>This is the honest way to draw a forecast. A single line suggests a precision that does not exist; the cone shows the band of what is possible. It is the same shape central banks use in their <em>fan charts</em> to publish inflation projections.</p>
+
+        <h3>The use that pays off most</h3>
+        <p>Switch the cone on for two averages and look at <strong>whether the cones are going to touch within the horizon</strong>. If they overlap from bar 6 onward, a cross is plausible in the short term. If they never come close, it is not. It is the visual reading of the same question the probability table answers with a number.</p>
+      </section>
+
+      <section id="en-probabilidad">
+        <h2><span class="n">08</span> The cross probability</h2>
+        <div class="chips"><span class="chip grp">🎲 Cross probability</span><span class="chip off">off</span></div>
+        <p>A table with ten rows: the five price-against-average pairs, and the five average-against-average pairs you defined in the alert slots. For each one it estimates the probability that the two lines touch within the horizon you pick.</p>
+
+        <h3>How it works, in plain language</h3>
+        <p>A cross happens when the <strong>gap</strong> between two lines reaches zero. So the question "will they cross?" is really "will this gap reach zero?", and that depends on three things only:</p>
+        <ol>
+          <li><strong>How big the gap is today.</strong> The closer they are, the easier it is.</li>
+          <li><strong>Where the gap is heading.</strong> If they are converging it helps; if they are separating it works against.</li>
+          <li><strong>How much the gap wobbles.</strong> This is the factor that weighs most. Two lines far apart with a gap that jumps around can touch; two lines close together with a still gap will not.</li>
+        </ol>
+        <p>Think of it this way: someone walking down a corridor with a wall on one side. The probability that they touch the wall depends on how far away they are, which way they are walking, and how much they wobble. That is exactly what the formula computes — it is called <em>first-passage time</em> and it is the same mathematics used to work out the probability of a price touching a barrier.</p>
+
+        <div class="note">
+          <span class="lbl">Why this cannot be overfitted</span>
+          <p>It is a <strong>closed-form formula</strong>, not a curve optimised against the past. There are no parameters somebody tuned until the historical results looked good. Three market measurements go in and a number comes out. If two lines are very close and the gap wobbles a lot, the probability is high; and if not, it is not.</p>
+        </div>
+
+        <h3>Three corrections the textbook formula does not include</h3>
+        <p>The formula as it appears in the books returns a biased number for what is being measured here. The module carries three corrections, and all three were measured by simulation over 400,000 bars before being accepted.</p>
+
+        <ol>
+          <li><strong>The formula is continuous-time; the cross is measured between closes.</strong> The textbook calculation assumes the lines can touch at any instant. But a cross here is declared by comparing closes: if the gap dips and recovers within the same candle, there was no cross. Uncorrected, the formula counted those cases and <strong>overstated by 10 percentage points on average</strong>, up to 20 with the lines close together. The known correction is to shift the barrier slightly outward. The bias drops to half a point.</li>
+
+          <li><strong>The gap between two averages is not a random walk: it is a smooth curve.</strong> The changes in a gap between moving averages are 96% correlated with the previous change. Measuring the wobble candle by candle and stretching it by the square root of time understated the real dispersion by about three times, which made projecting the gap's trend look far more certain than it is. The wobble is now measured directly at the scale of the horizon, so the curve's smoothness is absorbed by the measurement itself.</li>
+
+          <li><strong>The gap's trend is measured with error, and sometimes it is just noise.</strong> When the measured trend is small relative to its own margin of error, it is not a trend: it is noise. It is now shrunk in proportion to how far it stands out from that noise. The interesting part is that the two pair types behave in opposite ways: in average-against-average pairs the trend is real information — removing it halves the predictive power — while in price-against-average pairs it is almost pure noise. The shrinkage tells the two cases apart on its own, candle by candle.</li>
+        </ol>
+
+        <div class="note">
+          <span class="lbl">How much it improved, in numbers</span>
+          <p>What matters is the calibration error in the region the table actually displays, that is, when the probability clears the threshold. In average-against-average pairs it went from <strong>29 to 15 percentage points</strong>; in price-against-average pairs, from <strong>20 to 4</strong>. Put most concretely: previously, when the indicator announced between 80% and 100%, the cross happened 68% of the time. Now it announces 91% and it happens 81% of the time.</p>
+          <p>Some bias remains, and it is worth knowing: in average-against-average pairs the figure is still somewhat optimistic. Treat a 90% reading as "very likely", not as a certainty.</p>
+        </div>
+
+        <h3>The columns</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Column</th><th>What it shows</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Line 1 / Line 2</td><td>The pair. Each one in the colour of its average on the chart.</td></tr>
+              <tr><td class="ma">Dir</td><td>Which way the gap has to move for a cross to happen: ↓ if the first is above, ↑ if it is below.</td></tr>
+              <tr><td class="ma">Prob.</td><td>The probability that they touch within the horizon. Highlighted when it clears the threshold.</td></tr>
+              <tr><td class="ma">Bar</td><td>Which bar it would happen on, approximately, if the current pace holds.</td></tr>
+              <tr><td class="ma">Zone $</td><td>The price range where the cross would occur. It widens with time, just like the cone.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Why you sometimes see a dash</span>
+          <p><strong>Bar</strong> and <strong>Zone</strong> only appear when the probability clears the threshold — 60% by default. Below that they show "—", and that is on purpose: handing you an exact price for a cross that probably will not happen would be selling you a precision that does not exist. Lower the threshold if you want to see them anyway, but know what you are looking at.</p>
+          <p>There is a second reason they may show "—" even at high probability: if the gap's trend cannot be told apart from its own noise, it is shrunk to zero, and without a trend there is no way to estimate <em>when</em> they would cross. The probability that they touch is still valid — that depends on the wobble, not the trend — but the date is not.</p>
+        </div>
+
+        <h3>How to read it</h3>
+        <ul>
+          <li><strong>High probability with Dir ↓ on the price-against-200 pair:</strong> price is close to losing its underlying support.</li>
+          <li><strong>High probability on an average-against-average pair:</strong> a moving-average cross is brewing, potentially a Golden or Death Cross.</li>
+          <li><strong>Low probability with the lines visibly close:</strong> they are near each other but without the volatility to touch. A sleeping market. It often precedes an expansion.</li>
+        </ul>
+
+        <div class="note warn">
+          <span class="lbl">About the horizon</span>
+          <p>The horizon is measured in <strong>chart bars</strong>, not in bars of the average's timeframe. On a 1-hour chart with a daily average, a horizon of 10 means "within the next 10 one-hour bars", that is, a little over one session.</p>
+        </div>
+      </section>
+
+      <section id="en-banda">
+        <h2><span class="n">09</span> The noise band</h2>
+        <div class="chips"><span class="chip grp">🎛️ Noise band</span><span class="chip off">off</span></div>
+        <p>This is the quality filter that runs through the whole indicator. It changes the definition of "cross" for <strong>every</strong> cross: the ten price-against-average alerts, the ten slot alerts, and the Golden and Death Cross.</p>
+
+        <h3>The problem it solves</h3>
+        <p>In a range-bound market, price grazes the average over and over. Each graze is technically a cross, and it fires an alert. You can end up with ten notifications in one afternoon, none of which mean anything. That is called <em>whipsaw</em>, and it is the number one reason people abandon moving-average systems.</p>
+
+        <h3>How it solves it</h3>
+        <p>With the band active, a cross is declared only once the two lines separate by <strong>more than the market's normal wobble</strong>, measured as a multiple of the ATR. And once declared, it will not flip back until the separation crosses the band on the other side. That is called hysteresis: you have to genuinely break out for it to count.</p>
+        <p>The default width is 0.25 ATR — a quarter of the average range — with a 14-bar ATR. Raise it if you want fewer, cleaner signals; lower it if you feel you are missing moves. The cost is always the same: a little lag.</p>
+
+        <div class="note">
+          <span class="lbl">Compatibility</span>
+          <p>With the band off — which is how it ships — the behaviour is identical, line by line, to what the indicator did before this feature existed. If you updated from an earlier version, your alerts keep working exactly as before.</p>
+        </div>
+      </section>
+
+      <section id="en-hilo">
+        <h2><span class="n">10</span> How it all fits together</h2>
+        <p class="lead">The features are not a bag of loose parts. Four of them answer the same question — <strong>will it cross?</strong> — at four different moments.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 250" role="img" aria-label="Diagram of the four moments: probability, cone, fill and cross label">
+            <line x1="42" y1="62" x2="598" y2="62" stroke="var(--rule)" stroke-width="2"/>
+            <g font-family="Archivo, sans-serif">
+              <g>
+                <circle cx="70" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="70" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">1</text>
+                <text x="70" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">BEFORE</text>
+                <text x="70" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Probability</text>
+                <text x="70" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">gives you the number</text>
+                <text x="70" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">68%, in ~6 bars</text>
+              </g>
+              <g>
+                <circle cx="246" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="246" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">2</text>
+                <text x="246" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">BEFORE, VISUAL</text>
+                <text x="246" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Cone</text>
+                <text x="246" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">you see whether the</text>
+                <text x="246" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">cones will touch</text>
+              </g>
+              <g>
+                <circle cx="422" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="422" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">3</text>
+                <text x="422" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">DURING</text>
+                <text x="422" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Fill</text>
+                <text x="422" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">the band keeps</text>
+                <text x="422" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">thinning</text>
+              </g>
+              <g>
+                <circle cx="570" cy="62" r="9" fill="var(--accent)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="570" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#151A21" font-weight="600">4</text>
+                <text x="570" y="36" text-anchor="middle" font-size="11" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-weight="600">THE MOMENT</text>
+                <text x="570" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">The label</text>
+                <text x="570" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">marks the candle</text>
+                <text x="570" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">and the colour flips</text>
+              </g>
+              <rect x="42" y="168" width="556" height="58" rx="5" fill="var(--surface-2)" stroke="var(--rule)"/>
+              <text x="60" y="190" font-size="11.5" font-weight="600" fill="var(--ink)">And in parallel, the state of the system:</text>
+              <text x="60" y="210" font-size="11" fill="var(--muted)">Rate says whether each average has strength · the Fan says whether they all agree</text>
+            </g>
+          </svg>
+          <figcaption>The noise band runs through all four moments: it decides what counts as a cross in every one of them.</figcaption>
+        </figure>
+
+        <p>If you take one idea away from this manual, make it this one. Most traders only have step 4: they find out about the cross once it has happened. Steps 1 to 3 are the difference between reacting and anticipating.</p>
+      </section>
+
+      <section id="en-alarmas">
+        <h2><span class="n">11</span> The 24 alerts</h2>
+        <p>To create an alert: right-click on the chart → <em>Add alert</em>, or the clock icon. Under <em>Condition</em>, pick the <span class="k">MAs MTF (LFF)</span> indicator and then the alert you want from the dropdown. Every message comes out in all three languages at once, so there is nothing else to configure.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th class="num">Qty.</th><th>Family</th><th>What it is for</th></tr></thead>
+            <tbody>
+              <tr><td class="num">10</td><td>Price ↔ MA</td><td>Price crosses up or down through each of the five averages. They respect each average's "Show" switch: hide it and its alert stops firing.</td></tr>
+              <tr><td class="num">10</td><td>MA ↔ MA (slots)</td><td>Five configurable average-against-average pairs, each with its bullish and bearish cross. Built under <span class="k">🔔 MA↔MA slots</span>, and the slot has to be enabled for the alert to work.</td></tr>
+              <tr><td class="num">2</td><td>Wildcard</td><td>"Any price-against-average cross" and "any average-against-average cross". A single alert covering everything.</td></tr>
+              <tr><td class="num">2</td><td>Golden / Death Cross</td><td>The pair chosen in the ✨ group. The most useful ones for long-term positions.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Tip</span>
+          <p>If you are going to set alerts, switch the noise band on first. It is the difference between getting three useful notifications a month and thirty useless ones.</p>
+        </div>
+      </section>
+
+      <section id="en-recetas">
+        <h2><span class="n">12</span> Setup recipes</h2>
+        <p>Four starting points depending on what you want it for. These are not rules: they are sensible configurations to start experimenting from.</p>
+
+        <div class="recipes">
+          <div class="recipe">
+            <h4>Long-term investor</h4>
+            <p class="who">Daily or weekly chart. You want to know which regime the instrument is in, not to trade day to day.</p>
+            <dl>
+              <dt>Averages</dt><dd>Hide MA 1 and MA 2. Keep 50, 100 and 200.</dd>
+              <dt>Switch on</dt><dd>Fill (MA 3 ↔ MA 5), fan, rate.</dd>
+              <dt>Band</dt><dd>Enabled, width 0.5.</dd>
+              <dt>Switch off</dt><dd>Cone and probability.</dd>
+              <dt>Alerts</dt><dd>Golden and Death Cross only.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Swing trader</h4>
+            <p class="who">Daily chart, trades lasting days to weeks. You want the full context.</p>
+            <dl>
+              <dt>Averages</dt><dd>All five, on the chart's timeframe.</dd>
+              <dt>Switch on</dt><dd>Rate, fan, last cross, fill on MA 1 ↔ MA 3.</dd>
+              <dt>Probability</dt><dd>Enabled, horizon 10, threshold 60%.</dd>
+              <dt>Band</dt><dd>Enabled, width 0.25.</dd>
+              <dt>Alerts</dt><dd>Price ↔ MA 3, plus a slot on MA 1 ↔ MA 3.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Just the cross, clean</h4>
+            <p class="who">You want no clutter. Just the 50, the 200 and the cross.</p>
+            <dl>
+              <dt>Averages</dt><dd>Hide MA 1, MA 2 and MA 4.</dd>
+              <dt>Switch on</dt><dd>Fill and the cross's vertical line.</dd>
+              <dt>Table</dt><dd>Off, or with the fan row only.</dd>
+              <dt>Band</dt><dd>Enabled, width 0.5.</dd>
+              <dt>Switch off</dt><dd>Everything else.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Intraday with higher-timeframe context</h4>
+            <p class="who">You trade the 15-minute or 1-hour chart but do not want to lose sight of the bigger picture.</p>
+            <dl>
+              <dt>MA 1 and 2</dt><dd>Timeframe empty: they follow the chart.</dd>
+              <dt>MA 3, 4 and 5</dt><dd>Timeframe <span class="k">D</span>: daily context.</dd>
+              <dt>Switch on</dt><dd>Fan — this is where sorting by time covered earns its keep — rate, last cross.</dd>
+              <dt>Band</dt><dd>Enabled, width 0.25.</dd>
+              <dt>Careful</dt><dd>The cone runs narrow with daily averages. See limitations.</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section id="en-limites">
+        <h2><span class="n">13</span> Limitations</h2>
+        <p class="lead">Reading this section is part of using the tool well. None of these are defects to be fixed: they are the real boundaries of what these calculations can say.</p>
+        <ol>
+          <li><strong>The cone projects the average, not price.</strong> It is an "if everything stays the same" scenario. Price can do anything in the meantime.</li>
+          <li><strong>The cone runs narrower than it should for averages on a timeframe higher than the chart's.</strong> Volatility is measured in chart bars, and a daily average seen on a 1-hour chart barely moves during the day and then steps at the boundary. With the averages on the chart's timeframe, the cone is correct.</li>
+          <li><strong>The probability horizon is measured in chart bars</strong>, not in bars of the average's timeframe.</li>
+          <li><strong>The Golden Cross and the Death Cross lag by construction.</strong> They confirm; they do not anticipate.</li>
+          <li><strong>Moving averages perform poorly in range-bound markets.</strong> That is their structural weakness and no filter removes it entirely. The noise band mitigates it; it does not solve it.</li>
+          <li><strong>None of this is investment advice.</strong> It is technical analysis: probabilities, not certainties.</li>
+        </ol>
+      </section>
+
+      <section id="en-faq">
+        <h2><span class="n">14</span> Frequently asked questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Does it repaint?</summary>
+            <p>Multi-timeframe averages are requested without <em>lookahead</em>, so they do not peek into the future. The forming candle updates live as in any indicator, and that includes the cross labels: a label can appear and disappear within the current candle until it closes. Once the candle has closed, nothing moves backwards.</p>
+          </details>
+          <details>
+            <summary>I updated the indicator. Do I lose my settings or my alerts?</summary>
+            <p>No. Existing inputs keep their exact order and position, and the alerts keep their order and titles, precisely so that saved settings and already-created alerts keep pointing at the same thing. Everything new was appended at the end.</p>
+          </details>
+          <details>
+            <summary>Why does the probability table show dashes under Bar and Zone?</summary>
+            <p>Because that probability did not reach the threshold, 60% by default. It is intentional: an exact price is not shown for an improbable cross. Lower the threshold if you want to see them anyway.</p>
+          </details>
+          <details>
+            <summary>I changed the averages and the Golden Cross stopped making sense. What happened?</summary>
+            <p>The cross uses the pair you select in the ✨ group, MA 3 and MA 5 by default. If you reconfigured those two averages with different lengths, the cross is still computed on them. Adjust the two dropdowns so they point at whichever averages are now acting as fast and slow.</p>
+          </details>
+          <details>
+            <summary>Does it work for crypto and forex?</summary>
+            <p>Yes, everything works the same. The one caveat is the VWMA: it weights by volume, and in forex and spot crypto the volume reported by the exchange is partial, so that particular average loses part of its meaning. The other eight do not have that problem.</p>
+          </details>
+          <details>
+            <summary>Can I use it on timeframes other than the daily?</summary>
+            <p>Yes. The factory settings put all five averages on the daily, but you can change each one separately, or clear the field so they follow the chart's timeframe.</p>
+          </details>
+          <details>
+            <summary>The settings panel is in three languages at once. Can it show just one?</summary>
+            <p>No, and it is not an oversight. Pine Script fixes the panel's text at compile time: there is no way for a button to change it. That is why the panel is written in all three languages. The language selector does change what gets drawn on the chart: the table headers, the fan row and the cross labels.</p>
+          </details>
+          <details>
+            <summary>Is there a paid version?</summary>
+            <p>No. It is free, open source under the MPL 2.0 licence, and there are no locked features or premium tier.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+  </div>
+</div>
+
+<div class="wrap" data-lang-block="pt" hidden>
+  <details class="toc-mobile">
+    <summary>Conteúdo do manual</summary>
+    <nav class="rail" aria-label="Conteúdo">
+        <ol>
+          <li><a href="#pt-que-es"><span class="n">01</span> O que é e para quem é</a></li>
+          <li><a href="#pt-instalacion"><span class="n">02</span> Instalação e primeira execução</a></li>
+          <li><a href="#pt-medias"><span class="n">03</span> As cinco médias</a></li>
+          <li><a href="#pt-tabla"><span class="n">04</span> A tabela resumo</a></li>
+          <li><a href="#pt-cruces"><span class="n">05</span> Cruz Dourada e Cruz da Morte</a></li>
+          <li><a href="#pt-relleno"><span class="n">06</span> O preenchimento entre médias</a></li>
+          <li><a href="#pt-cono"><span class="n">07</span> O cone de projeção</a></li>
+          <li><a href="#pt-probabilidad"><span class="n">08</span> A probabilidade de cruzamento</a></li>
+          <li><a href="#pt-banda"><span class="n">09</span> A banda anti-ruído</a></li>
+          <li><a href="#pt-hilo"><span class="n">10</span> Como tudo se conecta</a></li>
+          <li><a href="#pt-alarmas"><span class="n">11</span> Os 24 alertas</a></li>
+          <li><a href="#pt-recetas"><span class="n">12</span> Receitas de configuração</a></li>
+          <li><a href="#pt-limites"><span class="n">13</span> Limitações</a></li>
+          <li><a href="#pt-faq"><span class="n">14</span> Perguntas frequentes</a></li>
+        </ol>
+    </nav>
+  </details>
+
+  <div class="layout">
+    <nav class="rail rail-desktop" aria-label="Conteúdo">
+      <p class="rail-title">Conteúdo</p>
+        <ol>
+          <li><a href="#pt-que-es"><span class="n">01</span> O que é e para quem é</a></li>
+          <li><a href="#pt-instalacion"><span class="n">02</span> Instalação e primeira execução</a></li>
+          <li><a href="#pt-medias"><span class="n">03</span> As cinco médias</a></li>
+          <li><a href="#pt-tabla"><span class="n">04</span> A tabela resumo</a></li>
+          <li><a href="#pt-cruces"><span class="n">05</span> Cruz Dourada e Cruz da Morte</a></li>
+          <li><a href="#pt-relleno"><span class="n">06</span> O preenchimento entre médias</a></li>
+          <li><a href="#pt-cono"><span class="n">07</span> O cone de projeção</a></li>
+          <li><a href="#pt-probabilidad"><span class="n">08</span> A probabilidade de cruzamento</a></li>
+          <li><a href="#pt-banda"><span class="n">09</span> A banda anti-ruído</a></li>
+          <li><a href="#pt-hilo"><span class="n">10</span> Como tudo se conecta</a></li>
+          <li><a href="#pt-alarmas"><span class="n">11</span> Os 24 alertas</a></li>
+          <li><a href="#pt-recetas"><span class="n">12</span> Receitas de configuração</a></li>
+          <li><a href="#pt-limites"><span class="n">13</span> Limitações</a></li>
+          <li><a href="#pt-faq"><span class="n">14</span> Perguntas frequentes</a></li>
+        </ol>
+    </nav>
+
+    <article>
+      <section id="pt-que-es">
+        <h2><span class="n">01</span> O que é e para quem é</h2>
+        <p class="lead">Cinco médias móveis independentes sobre o gráfico de preço, cada uma configurável até o último detalhe, mais um conjunto de leituras que dizem o que essas médias estão fazendo entre si.</p>
+        <p>Quase todos os indicadores de médias móveis do mercado fazem uma coisa só: desenham as linhas. Este também as desenha, mas além disso responde às perguntas que a gente se faz olhando para elas. Esta média está em tendência ou anda de lado? Estão todas de acordo? Quanto falta para se cruzarem? E esse cruzamento que estou vendo é real ou é ruído de um mercado lateral?</p>
+        <p>Serve para quem opera ou investe seguindo tendência e usa médias como esqueleto da sua análise: swing traders, investidores de médio prazo, e também quem só quer o cruzamento de 50 e 200 bem marcado e nada mais. Não é uma estratégia e não dá ordens de compra ou venda: é uma ferramenta de leitura.</p>
+        <h3>O que vem de fábrica</h3>
+        <ul>
+          <li><strong>9 tipos de média</strong> para cada uma das cinco: SMA, EMA, WMA, RMA, HMA, VWMA, TEMA, KAMA e JMA.</li>
+          <li><strong>Multi-tempo gráfico</strong>: cada média pode ser calculada em um tempo gráfico diferente do gráfico. Dá para ver a SMA 200 diária enquanto você opera em 1 hora.</li>
+          <li><strong>Trilíngue</strong>: espanhol, inglês e português.</li>
+          <li><strong>24 alertas</strong> configuráveis.</li>
+          <li><strong>Código aberto</strong> sob licença MPL 2.0 e gratuito, sem versão paga nem funções bloqueadas.</li>
+        </ul>
+      </section>
+
+      <section id="pt-instalacion">
+        <h2><span class="n">02</span> Instalação e primeira execução</h2>
+        <p>Procure pelo nome no buscador de indicadores do TradingView, <span class="k">Adv. MAs MTF (Eng/Spa/Port)(LFF)</span>, e adicione ao gráfico. Não precisa de mais nada.</p>
+
+        <h3>O que você vai ver assim que adicionar</h3>
+        <p>Cinco médias, uma tabela no canto superior direito e, se o ativo teve algum, os rótulos dos cruzamentos dourados e da morte sobre os candles.</p>
+
+        <div class="tw">
+          <table>
+            <thead>
+              <tr><th>Média</th><th>Tipo</th><th class="num">Comprimento</th><th>Cor</th><th class="num">Espessura</th><th>Para que serve</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="ma">MM 1</td><td>EMA</td><td class="num">8</td><td><span class="sw" style="background:#2962FF"></span>azul</td><td class="num">1</td><td>Pulso de curtíssimo prazo</td></tr>
+              <tr><td class="ma">MM 2</td><td>EMA</td><td class="num">21</td><td><span class="sw" style="background:#E53935"></span>vermelho</td><td class="num">1</td><td>Curto prazo</td></tr>
+              <tr><td class="ma">MM 3</td><td>EMA</td><td class="num">50</td><td><span class="sw" style="background:#E5C100"></span>amarelo</td><td class="num">1</td><td>Referência de swing</td></tr>
+              <tr><td class="ma">MM 4</td><td>SMA</td><td class="num">100</td><td><span class="sw" style="background:#43A047"></span>verde</td><td class="num">1</td><td>Tendência intermediária</td></tr>
+              <tr><td class="ma">MM 5</td><td>SMA</td><td class="num">200</td><td><span class="sw" style="background:#8E44AD"></span>violeta</td><td class="num">2</td><td>Tendência de fundo</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">O que mais surpreende no começo</span>
+          <p>As cinco médias vêm em <strong>tempo gráfico diário</strong>, não no do gráfico. Se você abrir um gráfico de 1 hora, vai ver as médias diárias desenhadas sobre ele — que é justamente a graça do indicador: contexto superior sem trocar de tela. Se quiser que sigam o tempo gráfico do gráfico, apague o campo <span class="k">Tempo gráfico</span> de cada média e deixe vazio.</p>
+        </div>
+
+        <p>A de 200 vem com espessura 2 de propósito: é a linha de referência estrutural do mercado e convém distingui-la de relance entre as outras quatro.</p>
+
+        <h3>Tudo o que é pesado vem desligado</h3>
+        <p>O cone de projeção, a tabela de probabilidade, o preenchimento e a banda anti-ruído vêm <strong>desativados</strong>. É deliberado: ao adicionar, você vê um gráfico limpo e vai ligando o que realmente usa. Este manual está mais ou menos nessa ordem, do básico ao opcional.</p>
+      </section>
+
+      <section id="pt-medias">
+        <h2><span class="n">03</span> As cinco médias</h2>
+        <p>Cada média tem seus catorze controles próprios, agrupados em <span class="k">📈 MA 1</span> … <span class="k">📈 MA 5</span>. Os que importam de verdade são quatro: tipo, comprimento, tempo gráfico e fonte.</p>
+
+        <h3>Que tipo de média usar</h3>
+        <p>A diferença entre os nove tipos se resume a uma coisa: <strong>quanto o passado recente pesa em relação ao distante</strong>. Quanto mais pesa o recente, mais cedo a média reage — e mais vezes ela erra.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Tipo</th><th>O que a torna diferente</th><th>Quando usar</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">SMA</td><td>Média simples: todas as barras pesam igual.</td><td>A mais lenta e estável. É a referência institucional: quando o mercado fala "a 200", fala de uma SMA.</td></tr>
+              <tr><td class="ma">EMA</td><td>Pondera mais as barras recentes, com decaimento exponencial.</td><td>A mais usada para seguir tendência. Reage antes da SMA sem ficar errática.</td></tr>
+              <tr><td class="ma">WMA</td><td>Ponderação linear decrescente.</td><td>Fica no meio do caminho entre SMA e EMA. Boa se a EMA lhe parece nervosa demais.</td></tr>
+              <tr><td class="ma">RMA</td><td>A média de Wilder, a que o RSI e o ATR usam por dentro. Muito suave.</td><td>Quando você quer filtrar ruído de forma agressiva. Equivale aproximadamente a uma EMA de período dobrado.</td></tr>
+              <tr><td class="ma">HMA</td><td>Hull: projetada para ter pouquíssimo atraso sem perder suavidade.</td><td>Para detectar viradas cedo. Muito reativa, e por isso mesmo engana em mercados laterais.</td></tr>
+              <tr><td class="ma">VWMA</td><td>Pondera cada barra pelo seu volume.</td><td>Onde o volume é real e significativo: ações, futuros, índices. Em forex e cripto spot o volume é parcial, então contribui menos.</td></tr>
+              <tr><td class="ma">TEMA</td><td>EMA tripla: praticamente elimina o atraso.</td><td>Operação rápida. O custo é o excesso: passa do ponto nas viradas bruscas.</td></tr>
+              <tr><td class="ma">KAMA</td><td>Adaptativa de Kaufman: acelera sozinha quando há tendência e freia quando há ruído.</td><td>Instrumentos que alternam entre fases de tendência e fases laterais. Ela se autorregula.</td></tr>
+              <tr><td class="ma">JMA</td><td>Jurik: suave e com pouco atraso ao mesmo tempo. Tem dois parâmetros globais, Fase e Potência.</td><td>Quando você quer o melhor dos dois mundos e não se importa em ajustar dois controles a mais.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Os parâmetros da JMA</span>
+          <p>Ficam no grupo <span class="k">🧮 Parâmetros globais JMA</span> e afetam todas as médias que você usar no modo JMA. Vêm com Fase 50 e Potência 2, que é a configuração padrão mais reproduzida de Mark Jurik. Fase 0 dá mais atraso; Fase acima de 0 dá menos atraso em troca de algum excesso. Potência maior suaviza mais e atrasa mais.</p>
+        </div>
+
+        <h3>O multi-tempo gráfico</h3>
+        <p>O campo <span class="k">Tempo gráfico</span> de cada média aceita qualquer tempo gráfico do TradingView. Vazio significa "o do gráfico". É a função mais potente do indicador e também a mais mal interpretada, então vale um esclarecimento: uma média diária vista num gráfico de 1 hora <strong>não é recalculada a cada hora</strong>. Ela fica parada o dia inteiro e dá um degrau quando o candle diário fecha. Isso está certo, é o que tem que acontecer; mas explica por que parece uma escada quando você dá muito zoom.</p>
+
+        <h3>Fonte, cor, espessura e estilo</h3>
+        <p>A <span class="k">Fonte</span> é sobre qual preço ela é calculada: fechamento, abertura, máxima, mínima, ou as médias <span class="k">hl2</span>, <span class="k">hlc3</span> e <span class="k">ohlc4</span>. Trocar para uma média suaviza a entrada antes do cálculo e reduz o efeito dos pavios longos. Cor, espessura e estilo (contínua, tracejada, pontilhada) são puramente visuais.</p>
+
+        <h3>Os rótulos sobre o gráfico</h3>
+        <p>Cada média pode mostrar um rótulo à direita com sua identificação técnica — <span class="k">EMA(50) 1D</span> — e você escolhe quais partes mostrar (tipo, comprimento, tempo gráfico), a que distância e de que tamanho. O formato é universal, igual nos três idiomas.</p>
+      </section>
+
+      <section id="pt-tabla">
+        <h2><span class="n">04</span> A tabela resumo</h2>
+        <div class="chips"><span class="chip grp">📋 Tabela resumo</span><span class="chip on">ligada</span></div>
+        <p>Uma linha por média e, opcionalmente, uma linha final de alinhamento. Você pode movê-la para qualquer um dos nove cantos, mudar o tamanho e as cores, e decidir se ela inclui as médias que estão ocultas.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th>Coluna</th><th>O que mostra</th><th>Como se lê</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Cor</td><td>A cor da linha no gráfico.</td><td>Para não ter que memorizar qual é qual.</td></tr>
+              <tr><td class="ma">Tipo</td><td>SMA, EMA, HMA…</td><td>—</td></tr>
+              <tr><td class="ma">Comprimento</td><td>O período.</td><td>—</td></tr>
+              <tr><td class="ma">Tempo gráfico</td><td>Em que tempo gráfico é calculada.</td><td>Se diz <span class="k">1D</span> e você está num gráfico de 1h, essa média é contexto superior.</td></tr>
+              <tr><td class="ma">Dist. %</td><td>Distância do preço até a média, em percentual.</td><td>Positivo = o preço está acima. Mede o quanto o preço está esticado: +12% acima da 200 costuma ser muito.</td></tr>
+              <tr><td class="ma">Dist. $</td><td>A mesma distância nas unidades do ativo.</td><td>Útil para dimensionar um stop.</td></tr>
+              <tr><td class="ma">Ritmo</td><td>A que velocidade a média sobe ou desce, em % do próprio valor por barra.</td><td>Veja abaixo.</td></tr>
+              <tr><td class="ma">Últ. cruz.</td><td>Quantas barras desde que o preço cruzou essa média pela última vez.</td><td>Número baixo = sinal fresco. Número muito alto = movimento maduro.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>A coluna Ritmo</h3>
+        <p>Mostra algo como <span class="k">↗ +0.085%</span>. Pega quanto a média se moveu nas últimas <span class="k">N</span> barras — 20 por padrão, ajustável em <span class="k">📐 Janela do ritmo</span> —, divide por N e expressa como percentual do valor atual da média.</p>
+        <p><strong>O que isso diz.</strong> Separa uma média que está realmente em tendência de uma que anda de lado. E essa distinção importa mais do que parece: uma média pode estar abaixo do preço — leitura de alta — e ao mesmo tempo estar se aplainando. Isso não é uma tendência de alta saudável, é uma tendência perdendo força. A seta avisa antes do preço mostrar.</p>
+        <p>A seta é ↗ se sobe, ↘ se desce e → se está plana. O limiar de "plana" você define em <span class="k">Limiar de plana</span>, 0,02% por barra por padrão. Como o número está normalizado em percentual, é comparável entre um ativo de 5 dólares e um de 5.000, e entre tempos gráficos diferentes.</p>
+        <p><strong>Leitura típica:</strong> todas as setas apontando para o mesmo lado é uma tendência saudável. As rápidas virando enquanto as lentas seguem iguais é uma mudança em formação, ainda sem confirmar.</p>
+
+        <h3>A linha de alinhamento: o leque</h3>
+        <p>A última linha diz algo como <span class="k">Leque: LEQUE DE ALTA · preço acima 5/5</span>. Ordena as médias da mais rápida à mais lenta e verifica se seus valores ficaram empilhados nessa mesma ordem.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 210" role="img" aria-label="Três diagramas comparando leque de alta, de baixa e misto">
+            <g font-family="IBM Plex Mono, monospace" font-size="11">
+              <g transform="translate(10,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bull-wash)" stroke="var(--rule)"/>
+                <path d="M14 118 C60 108, 120 78, 178 34" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 126 C60 118, 120 92, 178 52" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 132 C60 126, 120 104, 178 70" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 137 C60 133, 120 116, 178 88" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 141 C60 139, 120 127, 178 106" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bull)" font-weight="600">LEQUE DE ALTA</text>
+              </g>
+              <text x="106" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">rápida em cima,</text>
+              <text x="106" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">lenta embaixo</text>
+
+              <g transform="translate(224,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--bear-wash)" stroke="var(--rule)"/>
+                <path d="M14 34 C60 78, 120 108, 178 118" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 52 C60 92, 120 118, 178 126" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 70 C60 104, 120 126, 178 132" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 88 C60 116, 120 133, 178 137" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 106 C60 127, 120 139, 178 141" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--bear)" font-weight="600">LEQUE DE BAIXA</text>
+              </g>
+              <text x="320" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">rápida embaixo,</text>
+              <text x="320" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">lenta em cima</text>
+
+              <g transform="translate(438,10)">
+                <rect x="0" y="0" width="192" height="150" rx="4" fill="var(--surface-2)" stroke="var(--rule)"/>
+                <path d="M14 80 C60 50, 120 118, 178 62" fill="none" stroke="#2962FF" stroke-width="2"/>
+                <path d="M14 62 C60 106, 120 60, 178 104" fill="none" stroke="#E53935" stroke-width="2"/>
+                <path d="M14 104 C60 74, 120 100, 178 78" fill="none" stroke="#E5C100" stroke-width="2"/>
+                <path d="M14 92 C60 96, 120 82, 178 92" fill="none" stroke="#43A047" stroke-width="2"/>
+                <path d="M14 74 C60 88, 120 90, 178 86" fill="none" stroke="#8E44AD" stroke-width="3"/>
+                <text x="96" y="24" text-anchor="middle" fill="var(--muted)" font-weight="600">MISTO</text>
+              </g>
+              <text x="534" y="180" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">embaralhadas:</text>
+              <text x="534" y="195" text-anchor="middle" fill="var(--muted)" font-family="Archivo, sans-serif">sem acordo</text>
+            </g>
+          </svg>
+          <figcaption>Os três estados possíveis do leque. A linha mais grossa é a média de 200.</figcaption>
+        </figure>
+
+        <p><strong>O que isso diz.</strong> Um leque limpo é a assinatura clássica de uma tendência forte: todos os prazos estão de acordo ao mesmo tempo. Quando ele se embaralha e passa a MISTO, o mais comum é que seja o fim ou a pausa do movimento, não sua continuação.</p>
+        <p>O <span class="k">preço acima X/5</span> acrescenta onde o preço está em relação ao conjunto. Um 5/5 com leque de alta é a leitura mais limpa que existe. Um 2/5 com leque de alta avisa que o preço já está corrigindo para dentro das médias, ainda que as médias em si não tenham se desordenado.</p>
+
+        <div class="note">
+          <span class="lbl">Um detalhe de método que importa</span>
+          <p>A velocidade de cada média <strong>não é medida pelo comprimento</strong>, e sim pelo tempo que ela cobre: comprimento multiplicado pela duração do seu tempo gráfico. Ordenar só por comprimento seria um erro assim que você mistura tempos gráficos, porque uma EMA de 8 semanal cobre quase dois meses e é muito mais lenta que uma SMA de 200 em 5 minutos, que cobre menos de um dia. Com todas as médias no mesmo tempo gráfico — o caso padrão — o resultado é idêntico.</p>
+        </div>
+      </section>
+
+      <section id="pt-cruces">
+        <h2><span class="n">05</span> Cruz Dourada e Cruz da Morte</h2>
+        <div class="chips"><span class="chip grp">✨ Golden / Death Cross</span><span class="chip on">ligado</span><span class="chip">MM 3 ↔ MM 5</span></div>
+
+        <div class="note warn">
+          <span class="lbl">O mal-entendido mais comum</span>
+          <p>A Cruz Dourada e a Cruz da Morte são cruzamentos entre <strong>duas médias móveis</strong>, não entre o preço e uma média. O preço cruzar a de 200 é outra coisa, e este indicador a reporta separadamente nos seus alertas.</p>
+        </div>
+
+        <h3>As definições</h3>
+        <p><strong>Cruz Dourada (Golden Cross).</strong> Ocorre quando a média de curto prazo — classicamente a de 50 períodos — cruza para cima acima da média de longo prazo, a de 200. Indica um impulso de alta forte, e é geralmente lida como o início ou a confirmação de uma tendência de alta prolongada.</p>
+        <p><strong>Cruz da Morte (Death Cross).</strong> É o inverso: a de 50 cruza para baixo abaixo da de 200. Indica que a pressão vendedora se intensificou, e é lida como sinal de baixa que sugere o início ou o prolongamento de uma tendência de baixa.</p>
+
+        <h3>Como funciona aqui</h3>
+        <p>O par padrão é <span class="k">MM 3 ↔ MM 5</span>, que com os valores de fábrica é exatamente EMA(50) contra SMA(200): o cruzamento clássico. Os dois lados são escolhidos num menu suspenso, então dá para montar qualquer par — por exemplo 8 contra 21, para uma operação muito mais rápida.</p>
+        <p>Quando acontece, o indicador desenha um rótulo no candle exato: dourado abaixo do candle para a Cruz Dourada, vermelho escuro acima para a da Morte. Você pode deixar só o triângulo sem texto, mudar o tamanho, e ativar uma linha vertical que atravessa o gráfico para alinhar o cruzamento com o que o preço fez depois. Essa linha vem desligada porque polui bastante.</p>
+
+        <div class="note">
+          <span class="lbl">Interpretando com honestidade</span>
+          <p>A Cruz Dourada é um sinal <strong>atrasado por construção</strong>: usa médias de 50 e 200 períodos, ou seja, quando ela acontece o movimento já percorreu um bom trecho. Não serve para entrar no momento exato. Serve para confirmar uma mudança de regime que já está em curso — e para isso é excelente.</p>
+          <p>Por isso faz sentido acompanhá-la com as ferramentas que a antecipam: o preenchimento mostra as médias se aproximando, e a probabilidade de cruzamento coloca um número em quanto falta.</p>
+        </div>
+      </section>
+
+      <section id="pt-relleno">
+        <h2><span class="n">06</span> O preenchimento entre médias</h2>
+        <div class="chips"><span class="chip grp">🎨 Preenchimento entre MMs</span><span class="chip off">desligado</span><span class="chip">MM 3 ↔ MM 5</span></div>
+        <p>Sombreia a área entre duas médias que você escolhe. Verde quando a primeira está acima da segunda, vermelho quando está abaixo, com a transparência que você definir.</p>
+        <p>Vem apontando para o mesmo par da Cruz Dourada, e isso é proposital: <strong>o preenchimento é a versão contínua do cruzamento</strong>. Em vez de marcar só o instante, ele pinta o tempo todo de que lado você está.</p>
+
+        <h3>As três coisas que ele diz</h3>
+        <ul>
+          <li><strong>A cor</strong> é o regime: verde é território de Cruz Dourada, vermelho é território de Cruz da Morte.</li>
+          <li><strong>A troca de cor</strong> é, literalmente, o cruzamento. Acontece no mesmo candle em que aparece o rótulo.</li>
+          <li><strong>A espessura da faixa</strong> é a distância entre as duas médias, ou seja, a força do impulso. Uma faixa larga é uma tendência com convicção. Uma faixa que vai afinando avisa que as médias estão convergindo e que um cruzamento está se formando.</li>
+        </ul>
+        <p>Esse terceiro ponto é o que mais rende na prática e o que nenhum indicador que só marque o cruzamento consegue dar: deixa você ver a mudança de regime chegando com semanas de antecedência.</p>
+      </section>
+
+      <section id="pt-cono">
+        <h2><span class="n">07</span> O cone de projeção</h2>
+        <div class="chips"><span class="chip grp">🔮 Cone de projeção</span><span class="chip off">desligado</span></div>
+
+        <div class="note warn">
+          <span class="lbl">Antes de tudo</span>
+          <p>O cone <strong>não projeta o preço. Projeta a média móvel.</strong> Responde a uma única pergunta: se esta média mantiver o ritmo que tem, onde vai estar daqui a N barras? Não é uma previsão de preço e não é uma bola de cristal.</p>
+        </div>
+
+        <p>Ele desenha, à direita do último candle, uma faixa que se abre. A linha tracejada do centro é o rumo: o valor atual mais a inclinação vezes as barras. A faixa ao redor é a incerteza.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 220" role="img" aria-label="Diagrama do cone de projeção se alargando com o tempo">
+            <defs>
+              <linearGradient id="coneFadePt" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--accent)" stop-opacity=".30"/>
+                <stop offset="100%" stop-color="var(--accent)" stop-opacity=".08"/>
+              </linearGradient>
+            </defs>
+            <line x1="300" y1="18" x2="300" y2="186" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="292" y="14" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">passado</text>
+            <text x="308" y="14" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--muted)">futuro</text>
+            <path d="M30 150 C90 146, 180 132, 300 112" fill="none" stroke="#8E44AD" stroke-width="2.5"/>
+            <path d="M300 112 C380 100, 460 88, 600 62 L600 122 C460 130, 380 122, 300 112 Z" fill="url(#coneFadePt)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".55"/>
+            <path d="M300 112 L600 92" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <line x1="600" y1="62" x2="600" y2="122" stroke="var(--accent)" stroke-width="1.5"/>
+            <line x1="450" y1="88" x2="450" y2="122" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".6"/>
+            <g font-family="Archivo, sans-serif" font-size="11.5" fill="var(--muted)">
+              <text x="150" y="176">a média, até hoje</text>
+              <text x="430" y="150">a 5 barras:</text>
+              <text x="430" y="164">pouca dúvida</text>
+              <text x="500" y="186">a 20 barras: muito mais</text>
+              <text x="612" y="96" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-size="10">rumo</text>
+            </g>
+          </svg>
+          <figcaption>O cone se alarga com a raiz do tempo. Perto sabe-se bem onde a média vai estar; longe, quase nada.</figcaption>
+        </figure>
+
+        <p><strong>Por que ele se abre.</strong> Porque uma média pode se desviar do seu rumo, e quanto mais longe você olha, mais ela pode ter se desviado. A largura é proporcional à volatilidade multiplicada pela raiz do tempo. Com a largura em 1 a faixa cobre aproximadamente 68% dos casos — um desvio padrão; com 2, cerca de 95%.</p>
+        <p>Esta é a forma honesta de desenhar uma previsão. Uma linha sozinha sugere uma precisão que não existe; o cone mostra a faixa do possível. É a mesma forma que os bancos centrais usam nos seus <em>fan charts</em> para publicar projeções de inflação.</p>
+
+        <h3>O uso que mais rende</h3>
+        <p>Ligue o cone para duas médias e veja <strong>se os cones vão se tocar dentro do horizonte</strong>. Se eles se sobrepõem a partir da barra 6, há um cruzamento plausível no curto prazo. Se nem chegam perto, não há. É a leitura visual da mesma pergunta que a tabela de probabilidade responde com um número.</p>
+      </section>
+
+      <section id="pt-probabilidad">
+        <h2><span class="n">08</span> A probabilidade de cruzamento</h2>
+        <div class="chips"><span class="chip grp">🎲 Probabilidade de cruzamento</span><span class="chip off">desligada</span></div>
+        <p>Uma tabela com dez linhas: os cinco pares de preço contra média, e os cinco pares de média contra média que você definiu nos slots de alertas. Para cada um ela estima a probabilidade de que as duas linhas se toquem dentro do horizonte escolhido.</p>
+
+        <h3>Como calcula, em linguagem simples</h3>
+        <p>Um cruzamento ocorre quando a <strong>distância</strong> entre duas linhas chega a zero. Então a pergunta "vão se cruzar?" é na verdade "essa distância vai chegar a zero?", e isso depende de três coisas apenas:</p>
+        <ol>
+          <li><strong>Quão grande é a distância hoje.</strong> Quanto mais perto estão, mais fácil.</li>
+          <li><strong>Para onde vai a distância.</strong> Se estão se aproximando, ajuda; se estão se separando, joga contra.</li>
+          <li><strong>Quanto a distância treme.</strong> Este é o fator que mais pesa. Duas linhas afastadas mas com uma distância que dá saltos grandes podem se tocar; duas linhas pertinho com uma distância parada, não.</li>
+        </ol>
+        <p>Pense assim: alguém caminha por um corredor com uma parede ao lado. A probabilidade de encostar na parede depende de quão longe está, para onde está caminhando, e quanto cambaleia. É exatamente isso que a fórmula calcula — chama-se <em>tempo de primeira passagem</em> e é a mesma matemática usada para estimar a probabilidade de um preço tocar uma barreira.</p>
+
+        <div class="note">
+          <span class="lbl">Por que isso não dá para sobreajustar</span>
+          <p>É uma <strong>fórmula fechada</strong>, não uma curva otimizada contra o passado. Não há parâmetros que alguém ajustou até os resultados históricos ficarem bonitos. Entram três medições do mercado e sai um número. Se duas linhas estão muito juntas e a distância treme muito, a probabilidade é alta; e se não, não é.</p>
+        </div>
+
+        <h3>Três correções que a fórmula de manual não traz</h3>
+        <p>A fórmula tal como aparece nos livros dá um número enviesado para o que se está medindo aqui. O módulo traz três correções, e as três foram medidas por simulação sobre 400.000 barras antes de serem aceitas.</p>
+
+        <ol>
+          <li><strong>A fórmula é de tempo contínuo; o cruzamento é medido entre fechamentos.</strong> O cálculo de livro supõe que as linhas podem se tocar em qualquer instante. Mas um cruzamento aqui é declarado comparando fechamentos: se a distância afunda e volta dentro do mesmo candle, não houve cruzamento. Sem correção, a fórmula contava esses casos e <strong>exagerava 10 pontos percentuais em média</strong>, chegando a 20 com as linhas próximas. A correção conhecida consiste em deslocar um pouco a barreira para fora. O viés cai para meio ponto.</li>
+
+          <li><strong>A distância entre duas médias não é um passeio aleatório: é uma curva suave.</strong> As variações de uma distância entre médias móveis estão correlacionadas em 96% com a variação anterior. Medir o tremor candle a candle e esticá-lo pela raiz do tempo subestimava a dispersão real cerca de três vezes, e isso fazia com que projetar a tendência da distância parecesse muito mais seguro do que é. Agora o tremor é medido diretamente na escala do horizonte, então a suavidade da curva fica absorvida pela própria medição.</li>
+
+          <li><strong>A tendência da distância é medida com erro, e às vezes é só ruído.</strong> Quando a tendência medida é pequena frente à sua própria margem de erro, não é uma tendência: é ruído. Agora ela é encolhida em proporção ao quanto se distingue desse ruído. O interessante é que os dois tipos de par se comportam ao contrário: nos pares média contra média a tendência é informação real — tirá-la derruba o poder preditivo pela metade —, enquanto nos pares preço contra média é quase puro ruído. O encolhimento distingue os dois casos sozinho, candle a candle.</li>
+        </ol>
+
+        <div class="note">
+          <span class="lbl">Quanto melhorou, em números</span>
+          <p>O que importa é o erro de calibração na região que a tabela efetivamente mostra, ou seja, quando a probabilidade supera o limiar. Nos pares média contra média passou de <strong>29 para 15 pontos percentuais</strong>; nos pares preço contra média, de <strong>20 para 4</strong>. Dito da forma mais concreta: antes, quando o indicador anunciava entre 80% e 100%, o cruzamento ocorria 68% das vezes. Agora anuncia 91% e ocorre 81%.</p>
+          <p>Resta viés, e convém saber: nos pares média contra média o número ainda é um pouco otimista. Trate uma leitura de 90% como "muito provável", não como uma certeza.</p>
+        </div>
+
+        <h3>As colunas</h3>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Coluna</th><th>O que mostra</th></tr></thead>
+            <tbody>
+              <tr><td class="ma">Linha 1 / Linha 2</td><td>O par. Cada uma com a cor da sua média no gráfico.</td></tr>
+              <tr><td class="ma">Dir</td><td>Para onde a distância tem que se mover para haver cruzamento: ↓ se a primeira está acima, ↑ se está abaixo.</td></tr>
+              <tr><td class="ma">Prob.</td><td>A probabilidade de que se toquem dentro do horizonte. Destacada quando supera o limiar.</td></tr>
+              <tr><td class="ma">Barra</td><td>Em que barra ocorreria, aproximadamente, se o ritmo atual se mantiver.</td></tr>
+              <tr><td class="ma">Zona $</td><td>A faixa de preços onde o cruzamento ocorreria. Alarga-se com o tempo, igual ao cone.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Por que às vezes aparece um traço</span>
+          <p>A <strong>Barra</strong> e a <strong>Zona</strong> só aparecem quando a probabilidade supera o limiar — 60% por padrão. Abaixo disso mostram "—", e é de propósito: dar um preço exato para um cruzamento que provavelmente não vai acontecer seria vender uma precisão que não existe. Baixe o limiar se quiser vê-las mesmo assim, mas saiba o que está olhando.</p>
+          <p>Há um segundo motivo para mostrarem "—" mesmo com probabilidade alta: se a tendência da distância não se distingue do seu próprio ruído, ela é encolhida a zero, e sem tendência não há como estimar <em>quando</em> se cruzariam. A probabilidade de que se toquem continua válida — isso depende do tremor, não da tendência —, mas a data não.</p>
+        </div>
+
+        <h3>Como interpretar</h3>
+        <ul>
+          <li><strong>Probabilidade alta com Dir ↓ no par preço contra a média de 200:</strong> o preço está perto de perder seu suporte de fundo.</li>
+          <li><strong>Probabilidade alta num par média contra média:</strong> está se formando um cruzamento de médias, potencialmente uma Cruz Dourada ou da Morte.</li>
+          <li><strong>Probabilidade baixa com as linhas visivelmente próximas:</strong> estão perto mas sem volatilidade para se tocarem. Um mercado adormecido. Costuma ser a antessala de uma expansão.</li>
+        </ul>
+
+        <div class="note warn">
+          <span class="lbl">Sobre o horizonte</span>
+          <p>O horizonte é medido em <strong>barras do gráfico</strong>, não do tempo gráfico da média. Num gráfico de 1 hora com uma média diária, um horizonte de 10 significa "nas próximas 10 barras de 1 hora", ou seja, pouco mais de um pregão.</p>
+        </div>
+      </section>
+
+      <section id="pt-banda">
+        <h2><span class="n">09</span> A banda anti-ruído</h2>
+        <div class="chips"><span class="chip grp">🎛️ Banda anti-ruído</span><span class="chip off">desligada</span></div>
+        <p>É o filtro de qualidade que atravessa todo o indicador. Muda a definição de "cruzamento" para <strong>todos</strong> os cruzamentos: os dez alertas de preço contra média, os dez dos slots, e a Cruz Dourada e a da Morte.</p>
+
+        <h3>O problema que resolve</h3>
+        <p>Num mercado lateral, o preço roça a média vez após vez. Cada roçada é tecnicamente um cruzamento, e dispara um alerta. Você pode terminar com dez avisos numa tarde, nenhum dos quais significa nada. Isso se chama <em>whipsaw</em>, e é a razão número um pela qual as pessoas abandonam os sistemas de médias móveis.</p>
+
+        <h3>Como resolve</h3>
+        <p>Com a banda ativa, um cruzamento é declarado só quando as duas linhas se separam <strong>mais do que o tremor normal do mercado</strong>, medido como um múltiplo do ATR. E uma vez declarado, não volta a virar até que a separação cruze a banda do outro lado. Isso se chama histerese: tem que sair de verdade para contar.</p>
+        <p>A largura padrão é 0,25 ATR — um quarto do intervalo médio — com um ATR de 14 barras. Aumente se quiser menos sinais e mais limpos; diminua se sentir que está perdendo movimentos. O custo é sempre o mesmo: um pouco de atraso.</p>
+
+        <div class="note">
+          <span class="lbl">Compatibilidade</span>
+          <p>Com a banda desligada — que é como ela vem — o comportamento é idêntico, linha por linha, ao que o indicador fazia antes desta função existir. Se você atualizou de uma versão anterior, seus alertas continuam funcionando exatamente igual.</p>
+        </div>
+      </section>
+
+      <section id="pt-hilo">
+        <h2><span class="n">10</span> Como tudo se conecta</h2>
+        <p class="lead">As funções não são um saco de coisas soltas. Quatro delas respondem à mesma pergunta — <strong>vai cruzar?</strong> — em quatro momentos diferentes.</p>
+
+        <figure>
+          <svg viewBox="0 0 640 250" role="img" aria-label="Diagrama dos quatro tempos: probabilidade, cone, preenchimento e rótulo do cruzamento">
+            <line x1="42" y1="62" x2="598" y2="62" stroke="var(--rule)" stroke-width="2"/>
+            <g font-family="Archivo, sans-serif">
+              <g>
+                <circle cx="70" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="70" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">1</text>
+                <text x="70" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">ANTES</text>
+                <text x="70" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Probabilidade</text>
+                <text x="70" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">dá o número</text>
+                <text x="70" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">68%, em ~6 barras</text>
+              </g>
+              <g>
+                <circle cx="246" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="246" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">2</text>
+                <text x="246" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">ANTES, VISUAL</text>
+                <text x="246" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Cone</text>
+                <text x="246" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">você vê se os cones</text>
+                <text x="246" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">vão se tocar</text>
+              </g>
+              <g>
+                <circle cx="422" cy="62" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="422" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--accent-ink)" font-weight="600">3</text>
+                <text x="422" y="36" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">DURANTE</text>
+                <text x="422" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Preenchimento</text>
+                <text x="422" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">a faixa vai</text>
+                <text x="422" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">afinando</text>
+              </g>
+              <g>
+                <circle cx="570" cy="62" r="9" fill="var(--accent)" stroke="var(--accent)" stroke-width="2.5"/>
+                <text x="570" y="66" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" fill="#151A21" font-weight="600">4</text>
+                <text x="570" y="36" text-anchor="middle" font-size="11" fill="var(--accent-ink)" font-family="IBM Plex Mono, monospace" font-weight="600">O MOMENTO</text>
+                <text x="570" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">O rótulo</text>
+                <text x="570" y="112" text-anchor="middle" font-size="10.5" fill="var(--muted)">marca o candle</text>
+                <text x="570" y="128" text-anchor="middle" font-size="10.5" fill="var(--muted)">e a cor muda</text>
+              </g>
+              <rect x="42" y="168" width="556" height="58" rx="5" fill="var(--surface-2)" stroke="var(--rule)"/>
+              <text x="60" y="190" font-size="11.5" font-weight="600" fill="var(--ink)">E em paralelo, o estado do sistema:</text>
+              <text x="60" y="210" font-size="11" fill="var(--muted)">o Ritmo diz se cada média tem força · o Leque diz se todas estão de acordo</text>
+            </g>
+          </svg>
+          <figcaption>A banda anti-ruído atravessa os quatro tempos: decide o que conta como cruzamento em todos eles.</figcaption>
+        </figure>
+
+        <p>Se você levar uma única ideia deste manual, que seja esta. A maioria dos operadores só tem o passo 4: fica sabendo do cruzamento quando ele já passou. Os passos 1 a 3 são a diferença entre reagir e antecipar.</p>
+      </section>
+
+      <section id="pt-alarmas">
+        <h2><span class="n">11</span> Os 24 alertas</h2>
+        <p>Para criar um alerta: clique com o botão direito no gráfico → <em>Adicionar alerta</em>, ou o ícone do relógio. Em <em>Condição</em>, escolha o indicador <span class="k">MAs MTF (LFF)</span> e depois o alerta que quiser no menu. Todas as mensagens saem nos três idiomas de uma vez, então não há mais nada para configurar.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th class="num">Qtd.</th><th>Família</th><th>Para que serve</th></tr></thead>
+            <tbody>
+              <tr><td class="num">10</td><td>Preço ↔ MM</td><td>O preço cruza para cima ou para baixo cada uma das cinco médias. Respeitam o interruptor "Mostrar" de cada média: se você ocultá-la, o alerta dela não dispara.</td></tr>
+              <tr><td class="num">10</td><td>MM ↔ MM (slots)</td><td>Cinco pares configuráveis de média contra média, cada um com seu cruzamento de alta e de baixa. Montam-se em <span class="k">🔔 Slots MA↔MA</span> e é preciso ativar o slot para o alerta funcionar.</td></tr>
+              <tr><td class="num">2</td><td>Coringa</td><td>"Qualquer cruzamento preço contra média" e "qualquer cruzamento média contra média". Um único alerta que cobre tudo.</td></tr>
+              <tr><td class="num">2</td><td>Golden / Death Cross</td><td>O par escolhido no grupo ✨. Os mais úteis para posições de longo prazo.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note">
+          <span class="lbl">Dica</span>
+          <p>Se você vai usar alertas, ligue antes a banda anti-ruído. É a diferença entre receber três avisos úteis por mês e trinta inúteis.</p>
+        </div>
+      </section>
+
+      <section id="pt-recetas">
+        <h2><span class="n">12</span> Receitas de configuração</h2>
+        <p>Quatro pontos de partida conforme o uso que você quiser dar. Não são regras: são configurações sensatas para começar a experimentar.</p>
+
+        <div class="recipes">
+          <div class="recipe">
+            <h4>Investidor de longo prazo</h4>
+            <p class="who">Gráfico diário ou semanal. Você quer saber em que regime está o ativo, não operar o dia a dia.</p>
+            <dl>
+              <dt>Médias</dt><dd>Oculte MM 1 e MM 2. Deixe 50, 100 e 200.</dd>
+              <dt>Ligue</dt><dd>Preenchimento (MM 3 ↔ MM 5), leque, ritmo.</dd>
+              <dt>Banda</dt><dd>Ativada, largura 0,5.</dd>
+              <dt>Desligue</dt><dd>Cone e probabilidade.</dd>
+              <dt>Alertas</dt><dd>Só Cruz Dourada e da Morte.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Swing trader</h4>
+            <p class="who">Gráfico diário, operações de dias a semanas. Você quer o contexto completo.</p>
+            <dl>
+              <dt>Médias</dt><dd>As cinco, no tempo gráfico do gráfico.</dd>
+              <dt>Ligue</dt><dd>Ritmo, leque, últ. cruz., preenchimento em MM 1 ↔ MM 3.</dd>
+              <dt>Probabilidade</dt><dd>Ativada, horizonte 10, limiar 60%.</dd>
+              <dt>Banda</dt><dd>Ativada, largura 0,25.</dd>
+              <dt>Alertas</dt><dd>Preço ↔ MM 3, mais um slot MM 1 ↔ MM 3.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Só o cruzamento, limpo</h4>
+            <p class="who">Você não quer ruído. Quer a de 50, a de 200 e o cruzamento, e nada mais.</p>
+            <dl>
+              <dt>Médias</dt><dd>Oculte MM 1, MM 2 e MM 4.</dd>
+              <dt>Ligue</dt><dd>Preenchimento e a linha vertical do cruzamento.</dd>
+              <dt>Tabela</dt><dd>Desligada, ou só com a linha do leque.</dd>
+              <dt>Banda</dt><dd>Ativada, largura 0,5.</dd>
+              <dt>Desligue</dt><dd>Todo o resto.</dd>
+            </dl>
+          </div>
+
+          <div class="recipe">
+            <h4>Intradiário com contexto superior</h4>
+            <p class="who">Você opera em 15 minutos ou 1 hora mas não quer perder de vista o quadro maior.</p>
+            <dl>
+              <dt>MM 1 e 2</dt><dd>Tempo gráfico vazio: seguem o gráfico.</dd>
+              <dt>MM 3, 4 e 5</dt><dd>Tempo gráfico <span class="k">D</span>: contexto diário.</dd>
+              <dt>Ligue</dt><dd>Leque — aqui a ordenação por tempo coberto faz seu trabalho —, ritmo, últ. cruz.</dd>
+              <dt>Banda</dt><dd>Ativada, largura 0,25.</dd>
+              <dt>Atenção</dt><dd>O cone fica estreito com médias diárias. Veja limitações.</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section id="pt-limites">
+        <h2><span class="n">13</span> Limitações</h2>
+        <p class="lead">Ler esta seção faz parte de usar bem a ferramenta. Nenhuma destas coisas é um defeito a corrigir: são as fronteiras reais do que estes cálculos podem dizer.</p>
+        <ol>
+          <li><strong>O cone projeta a média, não o preço.</strong> É um cenário de "se tudo continuar igual". O preço pode fazer qualquer coisa nesse meio-tempo.</li>
+          <li><strong>O cone fica mais estreito do que deveria para médias em tempo gráfico superior ao do gráfico.</strong> A volatilidade é medida em barras do gráfico, e uma média diária vista em 1 hora quase não muda dentro do dia e dá um salto na borda. Com as médias no tempo gráfico do gráfico, o cone está correto.</li>
+          <li><strong>O horizonte da probabilidade é medido em barras do gráfico</strong>, não do tempo gráfico da média.</li>
+          <li><strong>A Cruz Dourada e a da Morte são atrasadas por construção.</strong> Confirmam, não antecipam.</li>
+          <li><strong>As médias móveis funcionam mal em mercados laterais.</strong> É a sua fraqueza estrutural e nenhum filtro a elimina por completo. A banda anti-ruído a mitiga; não a resolve.</li>
+          <li><strong>Nada disto é recomendação de investimento.</strong> É análise técnica: probabilidades, não certezas.</li>
+        </ol>
+      </section>
+
+      <section id="pt-faq">
+        <h2><span class="n">14</span> Perguntas frequentes</h2>
+        <div class="faq">
+          <details>
+            <summary>Ele repinta?</summary>
+            <p>As médias multi-tempo gráfico são pedidas sem <em>lookahead</em>, então não olham para o futuro. O candle em formação se atualiza ao vivo como em qualquer indicador, e isso inclui os rótulos dos cruzamentos: um rótulo pode aparecer e desaparecer dentro do candle em curso até que ele feche. Uma vez fechado, nada se move para trás.</p>
+          </details>
+          <details>
+            <summary>Atualizei o indicador. Perco minha configuração ou meus alertas?</summary>
+            <p>Não. Os controles existentes mantêm sua ordem e posição exatas, e os alertas mantêm sua ordem e seus títulos, justamente para que as configurações salvas e os alertas já criados continuem apontando para a mesma coisa. Tudo o que é novo foi adicionado ao final.</p>
+          </details>
+          <details>
+            <summary>Por que a tabela de probabilidade mostra traços em Barra e Zona?</summary>
+            <p>Porque aquela probabilidade não atingiu o limiar, 60% por padrão. É intencional: não se mostra um preço exato para um cruzamento improvável. Baixe o limiar se quiser vê-las mesmo assim.</p>
+          </details>
+          <details>
+            <summary>Mudei as médias e a Cruz Dourada deixou de fazer sentido. O que houve?</summary>
+            <p>O cruzamento usa o par que você escolher no grupo ✨, por padrão MM 3 e MM 5. Se você reconfigurou essas duas médias com outros comprimentos, o cruzamento continua sendo calculado sobre elas. Ajuste os dois menus para que apontem para as médias que agora fazem o papel de rápida e lenta.</p>
+          </details>
+          <details>
+            <summary>Serve para cripto e forex?</summary>
+            <p>Sim, tudo funciona igual. A única ressalva é a VWMA: ela pondera por volume, e em forex e cripto spot o volume que a corretora reporta é parcial, então essa média em particular perde parte do sentido. As outras oito não têm esse problema.</p>
+          </details>
+          <details>
+            <summary>Posso usar em tempos gráficos diferentes do diário?</summary>
+            <p>Sim. Os valores de fábrica colocam as cinco médias no diário, mas você pode mudar cada uma separadamente, ou esvaziar o campo para que sigam o tempo gráfico do gráfico.</p>
+          </details>
+          <details>
+            <summary>O painel de ajustes está em três idiomas ao mesmo tempo. Dá para deixar em um só?</summary>
+            <p>Não, e não é um descuido. O Pine Script fixa os textos do painel na compilação: não há como um botão mudá-los. Por isso o painel está escrito nos três idiomas. O seletor de idioma muda sim o que é desenhado no gráfico: os cabeçalhos da tabela, a linha do leque e os rótulos dos cruzamentos.</p>
+          </details>
+          <details>
+            <summary>Tem versão paga?</summary>
+            <p>Não. É gratuito, de código aberto sob licença MPL 2.0, e não há funções bloqueadas nem versão premium.</p>
+          </details>
+        </div>
+      </section>
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div data-lang-block="es">
+      <p class="sig">Adv. MAs MTF (Eng/Spa/Port)(LFF)</p>
+      <p>Lic. Farias Foresi, Leandro M. · Pine Script v6 · Licencia Mozilla Public License 2.0 · Script gratuito y de código abierto.</p>
+      <p>Este manual es material educativo sobre el uso de una herramienta de análisis técnico. No constituye asesoramiento financiero ni una recomendación de inversión. Operar en los mercados implica riesgo de pérdida.</p>
+    </div>
+    <div data-lang-block="en" hidden>
+      <p class="sig">Adv. MAs MTF (Eng/Spa/Port)(LFF)</p>
+      <p>Lic. Farias Foresi, Leandro M. · Pine Script v6 · Mozilla Public License 2.0 · Free and open-source script.</p>
+      <p>This manual is educational material about the use of a technical analysis tool. It does not constitute financial advice or an investment recommendation. Trading the markets involves the risk of loss.</p>
+    </div>
+    <div data-lang-block="pt" hidden>
+      <p class="sig">Adv. MAs MTF (Eng/Spa/Port)(LFF)</p>
+      <p>Lic. Farias Foresi, Leandro M. · Pine Script v6 · Licença Mozilla Public License 2.0 · Script gratuito e de código aberto.</p>
+      <p>Este manual é material educativo sobre o uso de uma ferramenta de análise técnica. Não constitui aconselhamento financeiro nem recomendação de investimento. Operar nos mercados implica risco de perda.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var LANGS = ['es', 'en', 'pt'];
+  var THEMES = ['auto', 'light', 'dark'];
+  var K_LANG = 'advmas.lang';
+  var K_THEME = 'advmas.theme';
+
+  // localStorage puede fallar (ventana privada, captura de miniatura, cookies bloqueadas).
+  // Nunca debe impedir que la página funcione: se envuelve todo y se sigue con el default.
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function write(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* sin persistencia */ } }
+
+  var THEME_TITLES = {
+    es: { auto: 'Automático (según tu sistema)', light: 'Tema claro', dark: 'Tema oscuro' },
+    en: { auto: 'Automatic (follows your system)', light: 'Light theme', dark: 'Dark theme' },
+    pt: { auto: 'Automático (segue seu sistema)', light: 'Tema claro', dark: 'Tema escuro' }
+  };
+  var TOC_TITLES = { es: 'Contenido del manual', en: 'Manual contents', pt: 'Conteúdo do manual' };
+
+  function each(sel, fn) {
+    var n = document.querySelectorAll(sel);
+    for (var i = 0; i < n.length; i++) { fn(n[i], i); }
+  }
+
+  function applyLang(lang) {
+    if (LANGS.indexOf(lang) < 0) { lang = 'es'; }
+    root.setAttribute('lang', lang);
+
+    each('[data-lang-block]', function (el) {
+      el.hidden = el.getAttribute('data-lang-block') !== lang;
+    });
+    each('[data-seg="lang"] button', function (b) {
+      var on = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+
+    var t = THEME_TITLES[lang];
+    each('[data-seg="theme"] button', function (b) {
+      var v = b.getAttribute('data-theme-set');
+      b.title = t[v];
+      b.setAttribute('aria-label', t[v]);
+    });
+    each('.toc-mobile > summary', function (s) { s.textContent = TOC_TITLES[lang]; });
+
+    write(K_LANG, lang);
+  }
+
+  function applyTheme(theme) {
+    if (THEMES.indexOf(theme) < 0) { theme = 'auto'; }
+    if (theme === 'auto') { root.removeAttribute('data-theme'); }
+    else { root.setAttribute('data-theme', theme); }
+
+    each('[data-seg="theme"] button', function (b) {
+      var on = b.getAttribute('data-theme-set') === theme;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+
+    write(K_THEME, theme);
+  }
+
+  each('[data-seg="lang"] button', function (b) {
+    b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang')); });
+  });
+  each('[data-seg="theme"] button', function (b) {
+    b.addEventListener('click', function () { applyTheme(b.getAttribute('data-theme-set')); });
+  });
+
+  // Estado inicial: lo guardado; si no hay nada, el idioma del navegador; si tampoco, español.
+  var savedLang = read(K_LANG);
+  if (!savedLang) {
+    var nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
+    savedLang = LANGS.indexOf(nav) >= 0 ? nav : 'es';
+  }
+  applyLang(savedLang);
+  applyTheme(read(K_THEME) || 'auto');
+})();
+</script>
